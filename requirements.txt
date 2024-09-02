@@ -1,0 +1,6 @@
+deepface==0.0.93
+Flask==3.0.3
+Flask_Cors==4.0.1
+numpy==2.1.0
+opencv_python==4.10.0.84
+PyMySQL==1.1.1
