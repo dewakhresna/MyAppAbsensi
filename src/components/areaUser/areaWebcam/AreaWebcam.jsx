@@ -1,46 +1,57 @@
+import React, { useRef } from "react";
 import Webcam from "react-webcam";
 import "./areaWebcam.scss";
-import { useEffect, useState } from "react";
 
 const AreaWebcam = () => {
-  // const [model, setMOdel] = useState();
+  const webcamRef = useRef(null);
 
-  // async function loadMOdel() {
-  //   try{
-  //     // const dataset = await model yang mau diload.load();
-  //     // setMOdel(dataset);
-  //     console.log("data ready");
-  //   }catch(err){
-  //     console.log(err);
-  //   }
-  // }
+  // Fungsi untuk menangkap gambar dari webcam
+  const capture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    // console.log("Gambar yang Ditangkap:", imageSrc);
+    if (imageSrc) {
+      console.log("Sending image to API");
+      sendImageToAPI(imageSrc);
+    }
+  };
 
-  // useEffect(() => {
-  //   // tf.ready().then(() => {
-  //   // loadMOdel()
-  //   // }) (jika pake tensor flow js)
-  // }, [])
-  
-  // async function predict() {
-  //   const detection = await model.detect()
-  //   console.log(detection)
-  // }
-  
+  // Fungsi untuk mengirim gambar ke API Flask
+  const sendImageToAPI = async (imageSrc) => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image: imageSrc,
+          no_induk: "22222" // ganti dengan ID yang sesuai
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Respons API:", data);
+    } catch (error) {
+      console.error("Error mengirim gambar ke API:", error);
+    }
+  };
+
   const videoOptions = {
     width: 720,
     height: 480,
     facingMode: "user",
   };
+
   return (
     <div className="area-webcam-container">
       <h2>Absensi Kehadiran</h2>
       <Webcam
-        id="fotoSource"
         audio={false}
         screenshotFormat="image/jpeg"
         videoConstraints={videoOptions}
+        ref={webcamRef}
       />
-      <button onClick={() => predict()}>Ambil Gambar</button>
+      <button onClick={capture}>Ambil Gambar</button>
     </div>
   );
 };
