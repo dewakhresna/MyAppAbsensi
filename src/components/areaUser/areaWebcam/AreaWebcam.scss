@@ -10,6 +10,54 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
+  text-align: center;
+
+  .loading-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-size: 1.5rem;
+  }
+
+  .result-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+
+    .result-content {
+      text-align: center;
+
+      .icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .result-verified {
+        color: green;
+      }
+
+      .result-not-verified {
+        color: red;
+      }
+    }
+  }
 
   h2 {
     font-size: 24px;
