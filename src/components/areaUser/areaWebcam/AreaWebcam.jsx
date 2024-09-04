@@ -38,7 +38,6 @@ const AreaWebcam = () => {
     // Start detecting faces
     const detectFace = async () => {
       if (modelsLoaded) {
-        // console.log("Model Loaded")
         const detections = await faceapi.detectAllFaces(video, options)
           .withFaceLandmarks();
 
@@ -50,7 +49,6 @@ const AreaWebcam = () => {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        // canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         faceapi.draw.drawDetections(canvas, resizedDetections);
         // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
