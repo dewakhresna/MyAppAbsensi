@@ -11,14 +11,17 @@
   },
   "dependencies": {
     "date-fns": "^3.1.0",
+    "face-api.js": "^0.22.2",
     "react": "^18.2.0",
     "react-date-range": "^2.0.0-alpha.4",
     "react-dom": "^18.2.0",
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.21.1",
+    "react-use-face-detection": "^1.0.1",
     "react-webcam": "^7.2.0",
     "recharts": "^2.10.3",
-    "sass": "^1.69.7"
+    "sass": "^1.69.7",
+    "sweetalert2": "^11.13.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

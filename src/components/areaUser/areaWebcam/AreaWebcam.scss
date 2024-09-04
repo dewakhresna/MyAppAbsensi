@@ -13,6 +13,17 @@
   position: relative;
   text-align: center;
 
+  .enabled {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .disabled {
+    background-color: #ddd;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+
   .loading-popup {
     position: fixed;
     top: 0;
