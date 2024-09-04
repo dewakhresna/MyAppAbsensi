@@ -31,6 +31,7 @@ const AreaWebcam = () => {
     canvas.height = video.videoHeight;
 
     const options = new faceapi.TinyFaceDetectorOptions({
+      inputSize: 128,
       scoreThreshold: 0.6
     });
 
