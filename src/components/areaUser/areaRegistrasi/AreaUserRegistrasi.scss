@@ -1,18 +1,17 @@
-.admin-login-container {
+.user-registrasi-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    margin: 50px;
   }
   
-  .login-box {
+  .registrasi-box {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    height: 300px;
+    width: 400px;
     text-align: center;
   }
   
@@ -30,7 +29,7 @@
     margin-bottom: 5px;
   }
   
-  input {
+  input, select {
     width: 100%;
     padding: 8px;
     border-radius: 4px;
@@ -42,7 +41,7 @@
     margin-bottom: 15px;
   }
   
-  .login-button {
+  .registrasi-button {
     width: 100%;
     padding: 10px;
     border: none;
@@ -53,7 +52,7 @@
     cursor: pointer;
   }
   
-  .login-button:hover {
+  .registrasi-button:hover {
     background-color: #0056b3;
   }
   
