@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
+import AreaLoading from "../../areaLoading/AreaLoading"; // Import AreaLoading component
 import "./areaWebcam.scss";
 
 const AreaWebcam = () => {
@@ -9,14 +10,14 @@ const AreaWebcam = () => {
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
-  const [isFaceDetected, setIsFaceDetected] = useState(false); // State untuk deteksi wajah
+  const [isFaceDetected, setIsFaceDetected] = useState(false);
 
   useEffect(() => {
     // Load face-api.js models
     const loadModels = async () => {
-      await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-      await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-      await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
       setModelsLoaded(true);
     };
     loadModels();
@@ -32,13 +33,14 @@ const AreaWebcam = () => {
 
     const options = new faceapi.TinyFaceDetectorOptions({
       inputSize: 128,
-      scoreThreshold: 0.6
+      scoreThreshold: 0.6,
     });
 
     // Start detecting faces
     const detectFace = async () => {
       if (modelsLoaded) {
-        const detections = await faceapi.detectAllFaces(video, options)
+        const detections = await faceapi
+          .detectAllFaces(video, options)
           .withFaceLandmarks();
 
         // Clear canvas and draw the detections
@@ -46,15 +48,14 @@ const AreaWebcam = () => {
         faceapi.matchDimensions(canvas, displaySize);
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         faceapi.draw.drawDetections(canvas, resizedDetections);
-        // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
-        if (resizedDetections.length == 1) {
+        if (resizedDetections.length === 1) {
           setIsFaceDetected(true);
-        } else{
+        } else {
           setIsFaceDetected(false);
         }
       }
@@ -64,18 +65,15 @@ const AreaWebcam = () => {
     detectFace();
   };
 
-  // Fungsi untuk menangkap gambar dari webcam
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    // console.log("Gambar yang Ditangkap:", imageSrc);
     if (imageSrc) {
       console.log("Sending image to API");
-      setLoading(true) // Set loading to true sebelum memulai fetch
+      setLoading(true); // Set loading to true before starting fetch
       sendImageToAPI(imageSrc);
     }
   };
 
-  // Fungsi untuk mengirim gambar ke API Flask
   const sendImageToAPI = async (imageSrc) => {
     try {
       const response = await fetch("http://127.0.0.1:5000/verification", {
@@ -85,24 +83,22 @@ const AreaWebcam = () => {
         },
         body: JSON.stringify({
           image: imageSrc,
-          no_induk: "11111" // ganti dengan ID yang sesuai
+          no_induk: "11111", // replace with appropriate ID
         }),
       });
 
       const data = await response.json();
-      console.log("Respons API:", data);
+      console.log("API Response:", data);
 
-      // Menampilkan SweetAlert2 berdasarkan response API
-      if (data.status === "success"){
-        if (data.response.verified){
+      if (data.status === "success") {
+        if (data.response.verified) {
           Swal.fire({
             title: "Success!",
             text: "Wajah Terverifikasi.",
             icon: "success",
             confirmButtonText: "OK",
           });
-        }
-        else {
+        } else {
           Swal.fire({
             title: "Verification Failed!",
             text: "Wajah Anda Tidak Sesuai. Mohon Ulangi Lagi.",
@@ -110,8 +106,7 @@ const AreaWebcam = () => {
             confirmButtonText: "OK",
           });
         }
-      }
-      else if (data.status === "error"){
+      } else if (data.status === "error") {
         Swal.fire({
           title: "Error!",
           text: data.response || "Terjadi kesalahan saat memproses gambar.",
@@ -120,7 +115,7 @@ const AreaWebcam = () => {
         });
       }
     } catch (error) {
-      console.error("Error mengirim gambar ke API:", error);
+      console.error("Error sending image to API:", error);
       Swal.fire({
         title: "Error!",
         text: "Terjadi kesalahan saat mengirim gambar.",
@@ -128,7 +123,7 @@ const AreaWebcam = () => {
         confirmButtonText: "OK",
       });
     } finally {
-      setLoading(false) // Set loading ke false setelah selesai
+      setLoading(false); // Set loading to false after completion
     }
   };
 
@@ -148,21 +143,17 @@ const AreaWebcam = () => {
         ref={webcamRef}
         onPlay={handleVideoPlay}
       />
-      <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+      <canvas ref={canvasRef} style={{ position: "absolute" }} />
       <button
         onClick={capture}
-        className={isFaceDetected ? 'enabled' : 'disabled'}
+        className={isFaceDetected ? "enabled" : "disabled"}
         disabled={!isFaceDetected}
       >
         Ambil Gambar
       </button>
 
-      {/* Popup Loading */}
-      {loading && (
-        <div className="loading-popup">
-          <p>Loading...</p>
-        </div>
-      )}
+      {/* Show AreaLoading component when loading */}
+      {<AreaLoading />}
     </div>
   );
 };

@@ -79,10 +79,10 @@
           &.dot-pending {
             background-color: var(--orange-color);
           }
-          &.dot-canceled {
+          &.dot-terlambat {
             background-color: var(--red-color);
           }
-          &.dot-delivered {
+          &.dot-tepatwaktu {
             background-color: var(--green-color);
           }
         }

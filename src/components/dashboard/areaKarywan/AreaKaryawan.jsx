@@ -2,42 +2,42 @@ import AreaKaryawanAction from "./AreaKaryawanAction";
 import "./AreaKaryawan.scss";
 
 const TABLE_HEADS = [
+  "No",
   "No Induk",
   "Nama",
-  "Waktu Absensi",
-  "Jam",
-  "Absensi",
-  "Keterangan",
+  "Email",
+  "Jenis Kelamin",
+  "No Telepon",
   "Action",
 ];
 
 const TABLE_DATA = [
   {
     id: 101,
+    no: 1,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Aug 29,2024",
-    jam: "09.00",
-    absensi: "Hadir",
-    keterangan: "-",
+    email: "dewakhresna04@gmail.com",
+    jenis_kelamin: "Laki-laki",
+    no_telepon: "08987654321",
   },
   {
     id: 101,
-    no_induk: "11578",
-    nama: "Luthfi",
-    tanggal: "Aug 25,2024",
-    jam: "09.00",
-    absensi: "Izin",
-    keterangan: "Acara Keluarga",
+    no: 2,
+    no_induk: "11232",
+    nama: "I Dewa Gede Khresna Bayu",
+    email: "dewakhresna04@gmail.com",
+    jenis_kelamin: "Laki-laki",
+    no_telepon: "08987654321",
   },
   {
     id: 101,
+    no: 3,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Jun 29,2022",
-    jam: "09.00",
-    absensi: "Sakit",
-    keterangan: "Demam",
+    email: "dewakhresna04@gmail.com",
+    jenis_kelamin: "Laki-laki",
+    no_telepon: "08987654321",
   },
 ];
 
@@ -57,15 +57,15 @@ const AreaKaryawan = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_DATA?.map((dataItem) => {
+            {TABLE_DATA?.map((dataKaryawan) => {
               return (
-                <tr key={dataItem.id}>
-                  <td>{dataItem.no_induk}</td>
-                  <td>{dataItem.nama}</td>
-                  <td>{dataItem.tanggal}</td>
-                  <td>{dataItem.jam}</td>
-                  <td>{dataItem.absensi}</td>
-                  <td>{dataItem.keterangan}</td>
+                <tr key={dataKaryawan.id}>
+                  <td>{dataKaryawan.no}</td>
+                  <td>{dataKaryawan.no_induk}</td>
+                  <td>{dataKaryawan.nama}</td>
+                  <td>{dataKaryawan.email}</td>
+                  <td>{dataKaryawan.jenis_kelamin}</td>
+                  <td>{dataKaryawan.no_telepon}</td>
                   {/* <td>${dataItem.amount.toFixed(2)}</td> */}
                   {/* <td>
                     <div className="dt-status">

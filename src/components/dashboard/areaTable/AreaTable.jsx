@@ -2,42 +2,45 @@ import AreaTableAction from "./AreaTableAction";
 import "./AreaTable.scss";
 
 const TABLE_HEADS = [
+  "No",
   "No Induk",
   "Nama",
-  "Waktu Absensi",
-  "Jam",
-  "Absensi",
+  "Tanggal Absensi",
+  "CheckIn",
+  "CheckOut",
   "Keterangan",
-  "Action",
 ];
 
 const TABLE_DATA = [
   {
     id: 101,
+    no: 1,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
     tanggal: "Aug 29,2024",
-    jam: "09.00",
-    absensi: "Hadir",
-    keterangan: "-",
+    cekin: "09.00",
+    cekout: "17.00",
+    keterangan: "Tepat Waktu",
   },
   {
     id: 101,
-    no_induk: "11578",
-    nama: "Luthfi",
-    tanggal: "Aug 25,2024",
-    jam: "09.00",
-    absensi: "Izin",
-    keterangan: "Acara Keluarga",
-  },
-  {
-    id: 101,
+    no: 2,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Jun 29,2022",
-    jam: "09.00",
-    absensi: "Sakit",
-    keterangan: "Demam",
+    tanggal: "Aug 29,2024",
+    cekin: "11.00",
+    cekout: "17.00",
+    keterangan: "Terlambat",
+  },
+  {
+    id: 101,
+    no: 3,
+    no_induk: "11232",
+    nama: "I Dewa Gede Khresna Bayu",
+    tanggal: "Aug 29,2024",
+    cekin: "08.45",
+    cekout: "17.00",
+    keterangan: "Tepat Waktu",
   },
 ];
 
@@ -57,27 +60,29 @@ const AreaTable = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_DATA?.map((dataItem) => {
+            {TABLE_DATA?.map((dataAbsensi) => {
               return (
-                <tr key={dataItem.id}>
-                  <td>{dataItem.no_induk}</td>
-                  <td>{dataItem.nama}</td>
-                  <td>{dataItem.tanggal}</td>
-                  <td>{dataItem.jam}</td>
-                  <td>{dataItem.absensi}</td>
-                  <td>{dataItem.keterangan}</td>
-                  {/* <td>${dataItem.amount.toFixed(2)}</td> */}
-                  {/* <td>
+                <tr key={dataAbsensi.id}>
+                  <td>{dataAbsensi.no}</td>
+                  <td>{dataAbsensi.no_induk}</td>
+                  <td>{dataAbsensi.nama}</td>
+                  <td>{dataAbsensi.tanggal}</td>
+                  <td>{dataAbsensi.cekin}</td>
+                  <td>{dataAbsensi.cekout}</td>
+                  {/* <td>${dataAbsensi.amount.toFixed(2)}</td> */}
+                  <td>
                     <div className="dt-status">
                       <span
-                        className={`dt-status-dot dot-${dataItem.status}`}
+                        className={`dt-status-dot dot-${dataAbsensi.keterangan}`}
                       ></span>
-                      <span className="dt-status-text">{dataItem.status}</span>
+                      <span className="dt-status-text">
+                        {dataAbsensi.keterangan}
+                      </span>
                     </div>
-                  </td> */}
-                  <td className="dt-cell-action">
-                    <AreaTableAction />
                   </td>
+                  {/* <td className="dt-cell-action">
+                    <AreaTableAction />
+                  </td> */}
                 </tr>
               );
             })}
