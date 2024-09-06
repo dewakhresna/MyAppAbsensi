@@ -1,6 +1,6 @@
 import { AreaWebcam } from "../../components";
 
-const User = () => {
+const UserAbsen = () => {
   return (
     <div className="content-area">
       <AreaWebcam />
@@ -8,4 +8,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserAbsen;

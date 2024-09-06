@@ -6,3 +6,7 @@ export { default as AreaTop } from "./dashboard/areaTop/AreaTop";
 export { default as AreaKaryawan } from "./dashboard/areaKarywan/AreaKaryawan";
 export { default as AreaAdminLogin } from "./areaLogin/AreaAdminLogin";
 export { default as AreaWebcam } from "./areaUser/areaWebcam/AreaWebcam";
+export { default as AreaUserRegistrasi } from "./areaUser/areaRegistrasi/AreaUserRegistrasi";
+export { default as AreaUserLogin } from "./areaUser/areaUserLogin/AreaUserLogin";
+export { default as AreaUserHome } from "./areaUser/areaUserHome/AreaUserHome";
+export { default as AreaLoading } from "./areaLoading/AreaLoading";

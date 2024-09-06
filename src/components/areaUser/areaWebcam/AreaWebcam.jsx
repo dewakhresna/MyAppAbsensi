@@ -85,7 +85,7 @@ const AreaWebcam = () => {
         },
         body: JSON.stringify({
           image: imageSrc,
-          no_induk: "11111" // ganti dengan ID yang sesuai
+          no_induk: "22222" // ganti dengan ID yang sesuai
         }),
       });
 
