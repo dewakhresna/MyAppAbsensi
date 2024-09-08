@@ -3,6 +3,7 @@ import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
 import "./areaWebcam.scss";
+import AreaLoading from "../../areaLoading/AreaLoading"
 
 const AreaWebcam = () => {
   const webcamRef = useRef(null);
@@ -32,7 +33,7 @@ const AreaWebcam = () => {
 
     const options = new faceapi.TinyFaceDetectorOptions({
       inputSize: 128,
-      scoreThreshold: 0.6
+      scoreThreshold: 0.7
     });
 
     // Start detecting faces
@@ -100,6 +101,9 @@ const AreaWebcam = () => {
             text: "Wajah Terverifikasi.",
             icon: "success",
             confirmButtonText: "OK",
+            preConfirm: () => {
+              window.location.href = 'http://localhost:5173/';
+            }
           });
         }
         else {
@@ -114,7 +118,7 @@ const AreaWebcam = () => {
       else if (data.status === "error"){
         Swal.fire({
           title: "Error!",
-          text: data.response || "Terjadi kesalahan saat memproses gambar.",
+          text: data.response || "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -123,7 +127,7 @@ const AreaWebcam = () => {
       console.error("Error mengirim gambar ke API:", error);
       Swal.fire({
         title: "Error!",
-        text: "Terjadi kesalahan saat mengirim gambar.",
+        text: "Terjadi kesalahan saat mengirim gambar. Mohon Ulangi Lagi",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -160,7 +164,7 @@ const AreaWebcam = () => {
       {/* Popup Loading */}
       {loading && (
         <div className="loading-popup">
-          <p>Loading...</p>
+          <AreaLoading />
         </div>
       )}
     </div>
