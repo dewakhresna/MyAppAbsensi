@@ -33,7 +33,7 @@ const AreaWebcam = () => {
 
     const options = new faceapi.TinyFaceDetectorOptions({
       inputSize: 128,
-      scoreThreshold: 0.7
+      scoreThreshold: 0.6
     });
 
     // Start detecting faces
@@ -50,7 +50,17 @@ const AreaWebcam = () => {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        faceapi.draw.drawDetections(canvas, resizedDetections);
+        // Custom drawing function to remove score display
+        resizedDetections.forEach(detection => {
+          const box = detection.detection.box;
+          const drawBox = new faceapi.draw.DrawBox(box, { 
+            label: 'Person',  // Set label to empty string
+            boxColor: 'red',  // You can customize the color
+            lineWidth: 3
+          });
+          drawBox.draw(canvas);
+        });
+
         // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
         if (resizedDetections.length == 1) {
