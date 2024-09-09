@@ -39,6 +39,10 @@ const Sidebar = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -110,16 +114,16 @@ const Sidebar = () => {
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link
-                to="/logout"
-                className={`menu-link ${activeItem === "/logout" ? "active" : ""}`}
-                onClick={() => setActiveItem("/logout")}
-              >
-                <span className="menu-link-icon">
-                  <MdOutlineLogout size={20} />
-                </span>
-                <span className="menu-link-text">Logout</span>
-              </Link>
+            <Link
+              to="/loginadmin"
+              className={"menu-link"}
+              onClick={handleLogout} // Menambahkan fungsi handleLogout di sini
+            >
+              <span className="menu-link-icon">
+                <MdOutlineLogout size={20} />
+              </span>
+              <span className="menu-link-text">Logout</span>
+            </Link>
             </li>
           </ul>
         </div>

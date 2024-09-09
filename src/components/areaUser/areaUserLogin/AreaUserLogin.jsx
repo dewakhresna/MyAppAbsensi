@@ -8,16 +8,32 @@ const AreaUserLogin = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    // Simulate authentication (replace this with actual authentication logic)
-    if (email === "user@example.com" && password === "123") {
-      navigate("/home");
-    } else {
-      setError("Email atau Password salah");
+  const handleLogin = async (e) => {
+    e.preventDefault(); 
+    try {
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log("Login berhasil");
+        navigate("/home");
+        localStorage.setItem("sukses", "karyawan");
+      } else {
+        setError("Email atau Password salah");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Terjadi kesalahan saat login. Coba lagi.");
     }
   };
+  
 
   return (
     <div className="user-login-container">

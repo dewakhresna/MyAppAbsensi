@@ -13,6 +13,7 @@ const AreaAdminLogin = () => {
 
     // Simulate authentication (replace this with actual authentication logic)
     if (email === "admin@example.com" && password === "123") {
+      localStorage.setItem("sukses", "admin");
       navigate("/admin");
     } else {
       setError("Email atau Password salah");

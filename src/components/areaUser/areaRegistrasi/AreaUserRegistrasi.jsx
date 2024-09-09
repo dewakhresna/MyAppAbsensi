@@ -10,26 +10,72 @@ const AreaUserRegistrasi = () => {
   const [gambar, setGambar] = useState(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [confirmpassword, setConfirmPassword] = useState("");
 
-  const handleRegistrasi = (e) => {
+  const handleRegistrasi = async (e) => {
     e.preventDefault();
-
-    // Validasi sederhana dan simpan data (ganti dengan logic registrasi sesungguhnya)
-    if (nomorInduk && email && nama && jenisKelamin && noTelepon && password) {
-      console.log("Registrasi berhasil");
-      // Reset form
-      setNomorInduk("");
-      setEmail("");
-      setNama("");
-      setJenisKelamin("");
-      setNoTelepon("");
-      setGambar(null);
-      setPassword("");
-      setError(null);
-    } else {
-      setError("Harap lengkapi semua field.");
+  
+    // Validasi nomor telepon dan NIK
+    const isNumeric = (str) => /^\d+$/.test(str); // Fungsi untuk mengecek apakah input hanya angka
+  
+    if (!isNumeric(nomorInduk)) {
+      setError("Nomor Induk Karyawan harus berupa angka.");
+      return;
+    }
+  
+    if (!isNumeric(noTelepon)) {
+      setError("Nomor Telepon harus berupa angka.");
+      return;
+    }
+  
+    if (password !== confirmpassword) {
+      setError("Konfirmasi password tidak sesuai.");
+      return;
+    }
+  
+    const userData = {
+      nik: nomorInduk,
+      email: email,
+      nama: nama,
+      kelamin: jenisKelamin,
+      hp: noTelepon,
+      password: password,
+    };
+  
+    try {
+      const response = await fetch("http://localhost:3001/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log("Registrasi berhasil");
+        // Reset form
+        setNomorInduk("");
+        setEmail("");
+        setNama("");
+        setJenisKelamin("");
+        setNoTelepon("");
+        setPassword("");
+        setConfirmPassword("");
+        setError(null);
+        alert("Registrasi user berhasil.");
+        window.location.href = "/login";
+      } else {
+        setError("Gagal melakukan registrasi.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Terjadi kesalahan. Coba lagi.");
     }
   };
+  
+  
 
   return (
     <div className="user-registrasi-container">
@@ -89,7 +135,7 @@ const AreaUserRegistrasi = () => {
               required
             />
           </div>
-          <div className="input-group">
+          {/* <div className="input-group">
             <label htmlFor="gambar">Upload Gambar</label>
             <input
               type="file"
@@ -97,7 +143,7 @@ const AreaUserRegistrasi = () => {
               onChange={(e) => setGambar(e.target.files[0])}
               required
             />
-          </div>
+          </div> */}
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <input
@@ -105,6 +151,17 @@ const AreaUserRegistrasi = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="confirmpassword">Konfirmasi Password</label>
+            <input
+              type="password"
+              id="confirmpassword"
+              value={confirmpassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>
