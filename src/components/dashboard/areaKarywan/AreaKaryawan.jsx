@@ -65,7 +65,7 @@ const AreaKaryawan = () => {
                   <td>{dataKaryawan.kelamin}</td>
                   <td>{dataKaryawan.hp}</td>
                   <td className="dt-cell-action">
-                    <AreaKaryawanAction />
+                    <AreaKaryawanAction id={dataKaryawan.id} />
                   </td>
                 </tr>
               ))}

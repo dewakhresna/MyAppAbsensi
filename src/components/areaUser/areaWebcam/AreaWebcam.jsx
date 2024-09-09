@@ -5,6 +5,91 @@ import Swal from "sweetalert2";
 import "./areaWebcam.scss";
 import AreaLoading from "../../areaLoading/AreaLoading"
 
+const OFFICE_LATITUDE = -6.18223503101325;
+const OFFICE_LONGITUDE = 107.03520440413142;
+
+const MAX_DISTANCE_METERS = 10;
+
+const HandlePost = async () => {
+  const nama = localStorage.getItem("nama");
+  const nik = localStorage.getItem("nik");
+  try {
+    const response = await fetch('http://localhost:3001/api/karyawan_hadir', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ nama, nik }), // Hanya mengirim nama
+    });
+
+    const data = await response.json();
+    console.log(data);
+    if (data.success) {
+      alert('Absen berhasil!');
+    } else {
+      alert('Gagal absen.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Gagal mengirim data.');
+  }
+}
+
+const handleAbsen = () => {
+  if (navigator.geolocation) {
+    console.log('Geolocation is supported');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        const distance = calculateDistance(
+          latitude,
+          longitude,
+          OFFICE_LATITUDE,
+          OFFICE_LONGITUDE
+        );
+        console.log(`Distance: ${distance} meters`);
+
+        if (distance >= MAX_DISTANCE_METERS) {
+          HandlePost();
+          
+        } else {
+          alert('Kamu tidak dapat absen, pastikan kamu di kantor');
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        alert('Tidak bisa mendapatkan lokasi. Pastikan izin lokasi diaktifkan.');
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    console.error('Geolocation is not supported by this browser.');
+    alert('Geolocation tidak didukung oleh browser ini.');
+  }
+};
+
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371e3; // Radius bumi dalam meter
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c; // Jarak dalam meter
+  console.log(`Calculated Distance: ${distance}`);
+  return distance;
+};
+
 const AreaWebcam = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);

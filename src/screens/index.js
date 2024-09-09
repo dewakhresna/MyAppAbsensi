@@ -1,6 +1,7 @@
 export { default as Dashboard } from "./dashboard/DashboardScreen";
 export { default as PageNotFound } from "./error/PageNotFound";
 export { default as Karyawan } from "./karyawan/KaryawanScreen";
+export { default as KaryawanEdit } from "./karyawan/KaryawanEditScreen";
 export { default as AdminLogin } from "./adminlogin/AdminLoginScreen";
 export { default as UserHome } from "./user/UserHome";
 export { default as UserRegistrasi } from "./user/UserRegistrasi";

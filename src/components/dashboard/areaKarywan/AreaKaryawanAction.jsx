@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
-const AreaKaryawanAction = () => {
+const AreaKaryawanAction = ({ id }) => { // Accept id as a prop
   const [showDropdown, setShowDropdown] = useState(false);
   const handleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -16,10 +16,31 @@ const AreaKaryawanAction = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm("Anda yakin ingin menghapus data ini?")) {
+      try {
+        const response = await fetch(`http://localhost:3001/api/delete/${id}`, {
+          method: 'DELETE',
+        });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.json();
+        if (data.success) {
+          window.location.reload();
+        }
+      } catch (error) {
+        alert(`Terjadi kesalahan: ${error.message}`);
+      }
+    }
+  };
+  
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -40,12 +61,12 @@ const AreaKaryawanAction = () => {
                 </Link>
               </li>
               <li className="dropdown-menu-item">
-                <Link to="/view" className="dropdown-menu-link">
+                <Link to={`/admin/karyawan/edit/${id}`} className="dropdown-menu-link">
                   Edit
                 </Link>
               </li>
               <li className="dropdown-menu-item">
-                <Link to="/view" className="dropdown-menu-link">
+                <Link onClick={handleDelete} className="dropdown-menu-link">
                   Delete
                 </Link>
               </li>

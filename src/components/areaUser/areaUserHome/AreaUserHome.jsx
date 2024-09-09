@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"; // Impor Link dari react-router-dom
 const AreaUserHome = () => {
   const handleLogout = () => {
     localStorage.removeItem("sukses");
+    localStorage.removeItem("nama");
+    localStorage.removeItem("nik");
   };
 
   return (

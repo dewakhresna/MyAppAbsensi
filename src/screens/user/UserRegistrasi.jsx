@@ -2,7 +2,7 @@ import { AreaUserRegistrasi } from "../../components";
 const UserRegistrasi = () => {
     return (
         <div className="content-area">
-            <AreaUserRegistrasi />
+            <AreaUserRegistrasi isEditMode={false} />
         </div>
     )
 }

@@ -9,7 +9,7 @@ const AreaUserLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       const response = await fetch("http://localhost:3001/api/login", {
         method: "POST",
@@ -18,13 +18,16 @@ const AreaUserLogin = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
-  
+
+      console.log(data);
       if (data.success) {
         console.log("Login berhasil");
-        navigate("/home");
         localStorage.setItem("sukses", "karyawan");
+        localStorage.setItem("nama", data.nama);
+        localStorage.setItem("nik", data.nik);
+        navigate("/home");
       } else {
         setError("Email atau Password salah");
       }

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AreaUserRegistrasi.scss"; // Custom styles for the registration page
+import { useParams } from 'react-router-dom';
 
-const AreaUserRegistrasi = () => {
+const AreaUserRegistrasi = ({ isEditMode = false }) => {
   const [nomorInduk, setNomorInduk] = useState("");
   const [email, setEmail] = useState("");
   const [nama, setNama] = useState("");
@@ -11,67 +12,99 @@ const AreaUserRegistrasi = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [confirmpassword, setConfirmPassword] = useState("");
+  const [currentGambar, setCurrentGambar] = useState("")
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (isEditMode && id) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/api/readKaryawan/${id}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          const employee = data[0];
+          setNomorInduk(employee.nik);
+          setEmail(employee.email);
+          setNama(employee.nama);
+          setJenisKelamin(employee.kelamin);
+          setNoTelepon(employee.hp);
+          setPassword(employee.password);
+          setConfirmPassword(employee.password);
+          setCurrentGambar(employee.gambar); // Menyimpan nama gambar yang ada di server
+        } catch (error) {
+          setError('Failed to fetch data.');
+        }
+      };
+      fetchData();
+    }
+  }, [isEditMode, id]);
+
+  const handleFileChange = (e) => {
+    setGambar(e.target.files[0]);
+  };
 
   const handleRegistrasi = async (e) => {
     e.preventDefault();
   
-    // Validasi nomor telepon dan NIK
-    const isNumeric = (str) => /^\d+$/.test(str); // Fungsi untuk mengecek apakah input hanya angka
+    const formData = new FormData();
   
+    formData.append('nik', nomorInduk);
+    formData.append('email', email);
+    formData.append('nama', nama);
+    formData.append('kelamin', jenisKelamin);
+    formData.append('hp', noTelepon);
+    formData.append('password', password);
+
+    if (gambar) {
+      formData.append('gambar', gambar);
+    } else if (isEditMode && currentGambar) {
+      // Tambahkan nama gambar yang sudah ada di server jika tidak memilih gambar baru
+      formData.append('gambar', currentGambar);
+    }
+  
+    // Validasi data
+    const isNumeric = (str) => /^\d+$/.test(str);
     if (!isNumeric(nomorInduk)) {
       setError("Nomor Induk Karyawan harus berupa angka.");
       return;
     }
-  
     if (!isNumeric(noTelepon)) {
       setError("Nomor Telepon harus berupa angka.");
       return;
     }
-  
     if (password !== confirmpassword) {
       setError("Konfirmasi password tidak sesuai.");
       return;
     }
   
-    const userData = {
-      nik: nomorInduk,
-      email: email,
-      nama: nama,
-      kelamin: jenisKelamin,
-      hp: noTelepon,
-      password: password,
-    };
-  
     try {
-      const response = await fetch("http://localhost:3001/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+      const response = await fetch(
+        isEditMode ? `http://localhost:3001/api/update/${id}` : "http://localhost:3001/api/register",
+        {
+          method: isEditMode ? "PUT" : "POST",
+          body: formData,
+        }
+      );
   
       const data = await response.json();
+      console.log('Response status:', response.status);
+      console.log('Response body:', data);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
   
       if (data.success) {
-        console.log("Registrasi berhasil");
-        // Reset form
-        setNomorInduk("");
-        setEmail("");
-        setNama("");
-        setJenisKelamin("");
-        setNoTelepon("");
-        setPassword("");
-        setConfirmPassword("");
-        setError(null);
-        alert("Registrasi user berhasil.");
-        window.location.href = "/login";
+        alert(isEditMode ? "Update user berhasil." : "Registrasi user berhasil.");
+        window.location.href = isEditMode ? "/admin/karyawan" : "/login";
       } else {
-        setError("Gagal melakukan registrasi.");
+        setError(isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.");
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Terjadi kesalahan. Coba lagi.");
+      setError(`Terjadi kesalahan: ${error.message}`);
     }
   };
   
@@ -80,7 +113,7 @@ const AreaUserRegistrasi = () => {
   return (
     <div className="user-registrasi-container">
       <div className="registrasi-box">
-        <h2>Registrasi User</h2>
+        <h2>{isEditMode ? "Edit User" : "Registrasi User"}</h2>
         <form onSubmit={handleRegistrasi}>
           <div className="input-group">
             <label htmlFor="nomorInduk">Nomor Induk Karyawan</label>
@@ -135,39 +168,52 @@ const AreaUserRegistrasi = () => {
               required
             />
           </div>
-          {/* <div className="input-group">
-            <label htmlFor="gambar">Upload Gambar</label>
-            <input
-              type="file"
-              id="gambar"
-              onChange={(e) => setGambar(e.target.files[0])}
-              required
-            />
-          </div> */}
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
 
           <div className="input-group">
-            <label htmlFor="confirmpassword">Konfirmasi Password</label>
             <input
-              type="password"
-              id="confirmpassword"
-              value={confirmpassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
+              type="text"
+              id="gambar"
+              value={currentGambar}
+              onChange={(e) => setCurrentGambar(e.target.value)}
+              style={{ display: 'none' }}
             />
           </div>
+          {!isEditMode && (
+            <>
+            <div className="input-group">
+            <label htmlFor="gambarRegis">Foto Registrasi</label>
+              <input
+                type="file"
+                id="gambarRegis"
+                onChange={handleFileChange}
+                required
+              />
+          </div>
+            <div className="input-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label htmlFor="confirmpassword">Konfirmasi Password</label>
+                <input
+                  type="password"
+                  id="confirmpassword"
+                  value={confirmpassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
           {error && <div className="error-message">{error}</div>}
           <button type="submit" className="registrasi-button">
-            Registrasi
+            {isEditMode ? "Update" : "Registrasi"}
           </button>
         </form>
       </div>
