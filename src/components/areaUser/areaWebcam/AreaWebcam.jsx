@@ -3,6 +3,7 @@ import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
 import "./areaWebcam.scss";
+import AreaLoading from "../../areaLoading/AreaLoading"
 
 const AreaWebcam = () => {
   const webcamRef = useRef(null);
@@ -49,7 +50,17 @@ const AreaWebcam = () => {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        faceapi.draw.drawDetections(canvas, resizedDetections);
+        // Custom drawing function to remove score display
+        resizedDetections.forEach(detection => {
+          const box = detection.detection.box;
+          const drawBox = new faceapi.draw.DrawBox(box, { 
+            label: 'Person',  // Set label to empty string
+            boxColor: 'red',  // You can customize the color
+            lineWidth: 3
+          });
+          drawBox.draw(canvas);
+        });
+
         // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
 
         if (resizedDetections.length == 1) {
@@ -100,6 +111,9 @@ const AreaWebcam = () => {
             text: "Wajah Terverifikasi.",
             icon: "success",
             confirmButtonText: "OK",
+            preConfirm: () => {
+              window.location.href = 'http://localhost:5173/';
+            }
           });
         }
         else {
@@ -114,7 +128,7 @@ const AreaWebcam = () => {
       else if (data.status === "error"){
         Swal.fire({
           title: "Error!",
-          text: data.response || "Terjadi kesalahan saat memproses gambar.",
+          text: data.response || "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -123,7 +137,7 @@ const AreaWebcam = () => {
       console.error("Error mengirim gambar ke API:", error);
       Swal.fire({
         title: "Error!",
-        text: "Terjadi kesalahan saat mengirim gambar.",
+        text: "Terjadi kesalahan saat mengirim gambar. Mohon Ulangi Lagi",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -160,7 +174,7 @@ const AreaWebcam = () => {
       {/* Popup Loading */}
       {loading && (
         <div className="loading-popup">
-          <p>Loading...</p>
+          <AreaLoading />
         </div>
       )}
     </div>
