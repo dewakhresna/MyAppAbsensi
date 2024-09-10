@@ -3,7 +3,7 @@ import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
 import "./areaWebcam.scss";
-import AreaLoading from "../../areaLoading/AreaLoading"
+import AreaLoading from "../../areaLoading/AreaLoading";
 
 const OFFICE_LATITUDE = -6.18223503101325;
 const OFFICE_LONGITUDE = 107.03520440413142;
@@ -35,44 +35,6 @@ const HandlePost = async () => {
   }
 }
 
-const handleAbsen = () => {
-  if (navigator.geolocation) {
-    console.log('Geolocation is supported');
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-        const distance = calculateDistance(
-          latitude,
-          longitude,
-          OFFICE_LATITUDE,
-          OFFICE_LONGITUDE
-        );
-        console.log(`Distance: ${distance} meters`);
-
-        if (distance >= MAX_DISTANCE_METERS) {
-          HandlePost();
-          
-        } else {
-          alert('Kamu tidak dapat absen, pastikan kamu di kantor');
-        }
-      },
-      (error) => {
-        console.error('Error getting location:', error);
-        alert('Tidak bisa mendapatkan lokasi. Pastikan izin lokasi diaktifkan.');
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  } else {
-    console.error('Geolocation is not supported by this browser.');
-    alert('Geolocation tidak didukung oleh browser ini.');
-  }
-};
-
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3; // Radius bumi dalam meter
   const φ1 = (lat1 * Math.PI) / 180;
@@ -86,7 +48,6 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   const distance = R * c; // Jarak dalam meter
-  console.log(`Calculated Distance: ${distance}`);
   return distance;
 };
 
@@ -95,7 +56,9 @@ const AreaWebcam = () => {
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
-  const [isFaceDetected, setIsFaceDetected] = useState(false); // State untuk deteksi wajah
+  const [isFaceDetected, setIsFaceDetected] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [distance, setDistance] = useState(null); // State untuk jarak
 
   useEffect(() => {
     // Load face-api.js models
@@ -106,6 +69,32 @@ const AreaWebcam = () => {
       setModelsLoaded(true);
     };
     loadModels();
+
+    // Get geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ latitude, longitude });
+          const calculatedDistance = calculateDistance(
+            latitude,
+            longitude,
+            OFFICE_LATITUDE,
+            OFFICE_LONGITUDE
+          );
+          setDistance(calculatedDistance); // Simpan jarak yang dihitung
+          // console.log(`${latitude}, ${longitude}`);
+          // console.log(`Distance: ${calculatedDistance}`);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      alert('Geolocation is not supported by this browser.');
+    }
+
   }, []);
 
   const handleVideoPlay = () => {
@@ -133,24 +122,22 @@ const AreaWebcam = () => {
         const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
         const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Custom drawing function to remove score display
         resizedDetections.forEach(detection => {
           const box = detection.detection.box;
           const drawBox = new faceapi.draw.DrawBox(box, { 
-            label: 'Person',  // Set label to empty string
-            boxColor: 'red',  // You can customize the color
+            label: 'Person',
+            boxColor: 'red',
             lineWidth: 3
           });
           drawBox.draw(canvas);
         });
 
-        // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-
-        if (resizedDetections.length == 1) {
+        if (resizedDetections.length === 1) {
           setIsFaceDetected(true);
-        } else{
+        } else {
           setIsFaceDetected(false);
         }
       }
@@ -161,13 +148,34 @@ const AreaWebcam = () => {
   };
 
   // Fungsi untuk menangkap gambar dari webcam
-  const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    // console.log("Gambar yang Ditangkap:", imageSrc);
-    if (imageSrc) {
-      console.log("Sending image to API");
-      setLoading(true) // Set loading to true sebelum memulai fetch
-      sendImageToAPI(imageSrc);
+  const capture = async () => {
+    if (userLocation && distance !== null) {
+      // Mengecek jarak yang telah disimpan
+      if (distance >= MAX_DISTANCE_METERS) {
+        Swal.fire({
+          title: "Error!",
+          text: "Anda berada terlalu jauh dari lokasi yang ditentukan",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+        return; // Hentikan eksekusi jika jarak melebihi batas
+      }
+
+      // Jika jarak OK, tampilkan loading
+      setLoading(true);
+      const imageSrc = webcamRef.current.getScreenshot();
+      if (imageSrc) {
+        console.log("Sending image to API");
+        await sendImageToAPI(imageSrc);
+      }
+    } else {
+      console.error('User location or distance not available.');
+      Swal.fire({
+        title: "Error!",
+        text: "Tidak bisa mendapatkan lokasi. Pastikan izin lokasi diaktifkan.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     }
   };
 
@@ -181,7 +189,7 @@ const AreaWebcam = () => {
         },
         body: JSON.stringify({
           image: imageSrc,
-          no_induk: "22222" // ganti dengan ID yang sesuai
+          no_induk: localStorage.getItem("nik")
         }),
       });
 
@@ -189,19 +197,19 @@ const AreaWebcam = () => {
       console.log("Respons API:", data);
 
       // Menampilkan SweetAlert2 berdasarkan response API
-      if (data.status === "success"){
-        if (data.response.verified){
+      if (data.status === "success") {
+        if (data.response.verified) {
           Swal.fire({
             title: "Success!",
             text: "Wajah Terverifikasi.",
             icon: "success",
-            confirmButtonText: "OK",
-            preConfirm: () => {
-              window.location.href = 'http://localhost:5173/';
+            confirmButtonText: "Absen",
+            preConfirm: async () => {
+              await HandlePost(); // Call HandlePost
+              window.location.href = 'http://localhost:5173/'; // Redirect after HandlePost
             }
           });
-        }
-        else {
+        } else {
           Swal.fire({
             title: "Verification Failed!",
             text: "Wajah Anda Tidak Sesuai. Mohon Ulangi Lagi.",
@@ -209,8 +217,7 @@ const AreaWebcam = () => {
             confirmButtonText: "OK",
           });
         }
-      }
-      else if (data.status === "error"){
+      } else if (data.status === "error") {
         Swal.fire({
           title: "Error!",
           text: data.response || "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
@@ -227,7 +234,7 @@ const AreaWebcam = () => {
         confirmButtonText: "OK",
       });
     } finally {
-      setLoading(false) // Set loading ke false setelah selesai
+      setLoading(false); // Set loading ke false setelah selesai
     }
   };
 
