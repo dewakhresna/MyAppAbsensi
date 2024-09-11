@@ -86,9 +86,9 @@ const Sidebar = () => {
             </li>
             <li className="menu-item">
               <Link
-                to="/"
-                className={`menu-link ${activeItem === "/izinsakit" ? "active" : ""}`}
-                onClick={() => setActiveItem("/izinsakit")}
+                to="/admin/izin"
+                className={`menu-link ${activeItem === "/admin/izin" ? "active" : ""}`}
+                onClick={() => setActiveItem("/admin/izin")}
               >
                 <span className="menu-link-icon">
                   <MdOutlineMessage size={18} />

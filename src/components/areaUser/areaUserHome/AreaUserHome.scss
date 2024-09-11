@@ -1,0 +1,117 @@
+.area-user-home {
+  .user-home-container {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .user-home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h1 {
+      font-size: 24px;
+      color: #343a40;
+    }
+
+    .menu-link-edit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      color: #343a40;
+      background-color: #ffffff;
+      border-radius: 50%;
+      text-decoration: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+      }
+
+      .menu-link-icon-edit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .user-status {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .status-card {
+      flex: 1;
+      background-color: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #f1f3f5;
+      }
+
+      .menu-link-icon {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .status-card-text {
+        font-size: 14px;
+        color: #495057;
+      }
+    }
+  }
+
+  .menu-absensi,
+  .menu-logout {
+    margin-bottom: 20px;
+  }
+
+  .menu-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu-item {
+    margin-bottom: 10px;
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #343a40;
+      padding: 10px;
+      background-color: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+      }
+
+      .menu-link-icon {
+        margin-right: 10px;
+      }
+
+      .menu-link-text {
+        font-size: 16px;
+      }
+    }
+  }
+}
