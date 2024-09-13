@@ -4,10 +4,10 @@ import { LIGHT_THEME } from "../../constants/themeConstants";
 import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
 import {
-  MdOutlineAttachMoney,
+  MdCoPresent,
   MdOutlineBarChart,
   MdOutlineClose,
-  MdOutlineCurrencyExchange,
+  MdEditDocument,
   MdOutlineGridView,
   MdOutlineLogout,
   MdOutlineMessage,
@@ -86,9 +86,9 @@ const Sidebar = () => {
                 onClick={() => setActiveItem("/admin")}
               >
                 <span className="menu-link-icon">
-                  <MdOutlineGridView size={18} />
+                  <MdCoPresent size={18} />
                 </span>
-                <span className="menu-link-text">Dashboard</span>
+                <span className="menu-link-text">Kehadiran</span>
               </Link>
             </li>
             <li className="menu-item">
@@ -98,7 +98,7 @@ const Sidebar = () => {
                 onClick={() => setActiveItem("/admin/izin")}
               >
                 <span className="menu-link-icon">
-                  <MdOutlineMessage size={18} />
+                  <MdEditDocument size={18} />
                 </span>
                 <span className="menu-link-text">Izin / Sakit</span>
               </Link>

@@ -39,7 +39,7 @@ const AreaIzinAction = () => {
                   View
                 </Link>
               </li>
-              <li className="dropdown-menu-item">
+              {/* <li className="dropdown-menu-item">
                 <Link to="/view" className="dropdown-menu-link">
                   Edit
                 </Link>
@@ -48,7 +48,7 @@ const AreaIzinAction = () => {
                 <Link to="/view" className="dropdown-menu-link">
                   Delete
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         )}

@@ -42,7 +42,7 @@ const AreaUserLogin = () => {
   return (
     <div className="user-login-container">
       <div className="login-box">
-        <h2>Login User</h2>
+        <h2>Login Karyawan</h2>
         <form onSubmit={handleLogin}>
           <div className="input-group">
             <label htmlFor="email">Email</label>

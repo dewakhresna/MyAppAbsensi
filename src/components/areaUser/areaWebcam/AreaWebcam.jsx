@@ -25,8 +25,13 @@ const handleCheck = async ({ masuk = false }) => {
     : JSON.stringify({ id, nik });
 
   try {
+<<<<<<< HEAD
     const response = await fetch(url, {
       method,
+=======
+    const response = await fetch("http://localhost:3001/api/karyawan_hadir", {
+      method: "POST",
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
       headers: {
         "Content-Type": "application/json",
       },
@@ -36,18 +41,27 @@ const handleCheck = async ({ masuk = false }) => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
+<<<<<<< HEAD
       alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
     } else {
       alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
+=======
+      alert("Absen berhasil!");
+    } else {
+      alert("Gagal absen.");
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
     }
   } catch (error) {
-    console.error('Error:', error);
-    alert('Gagal mengirim data.');
+    console.error("Error:", error);
+    alert("Gagal mengirim data.");
   }
 };
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3; // Radius bumi dalam meter
@@ -77,9 +91,9 @@ const AreaWebcam = ({  masuk = false }) => {
   useEffect(() => {
     // Load face-api.js models
     const loadModels = async () => {
-      await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
-      await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
-      await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
+      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
       setModelsLoaded(true);
     };
     loadModels();
@@ -101,14 +115,13 @@ const AreaWebcam = ({  masuk = false }) => {
           // console.log(`Distance: ${calculatedDistance}`);
         },
         (error) => {
-          console.error('Error getting location:', error);
+          console.error("Error getting location:", error);
         }
       );
     } else {
-      console.error('Geolocation is not supported by this browser.');
-      alert('Geolocation is not supported by this browser.');
+      console.error("Geolocation is not supported by this browser.");
+      alert("Geolocation is not supported by this browser.");
     }
-
   }, []);
 
   const handleVideoPlay = () => {
@@ -121,30 +134,37 @@ const AreaWebcam = ({  masuk = false }) => {
 
     const options = new faceapi.TinyFaceDetectorOptions({
       inputSize: 128,
-      scoreThreshold: 0.6
+      scoreThreshold: 0.6,
     });
 
     // Start detecting faces
     const detectFace = async () => {
       if (modelsLoaded) {
-        const detections = await faceapi.detectAllFaces(video, options)
+        const detections = await faceapi
+          .detectAllFaces(video, options)
           .withFaceLandmarks();
 
         // Clear canvas and draw the detections
-        const displaySize = { width: video.videoWidth, height: video.videoHeight };
+        const displaySize = {
+          width: video.videoWidth,
+          height: video.videoHeight,
+        };
         faceapi.matchDimensions(canvas, displaySize);
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        const resizedDetections = faceapi.resizeResults(
+          detections,
+          displaySize
+        );
 
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Custom drawing function to remove score display
-        resizedDetections.forEach(detection => {
+        resizedDetections.forEach((detection) => {
           const box = detection.detection.box;
-          const drawBox = new faceapi.draw.DrawBox(box, { 
-            label: 'Person',
-            boxColor: 'red',
-            lineWidth: 3
+          const drawBox = new faceapi.draw.DrawBox(box, {
+            label: "Person",
+            boxColor: "red",
+            lineWidth: 3,
           });
           drawBox.draw(canvas);
         });
@@ -170,7 +190,7 @@ const AreaWebcam = ({  masuk = false }) => {
           title: "Error!",
           text: "Anda berada terlalu jauh dari lokasi yang ditentukan",
           icon: "error",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
         return; // Hentikan eksekusi jika jarak melebihi batas
       }
@@ -183,12 +203,12 @@ const AreaWebcam = ({  masuk = false }) => {
         await sendImageToAPI(imageSrc);
       }
     } else {
-      console.error('User location or distance not available.');
+      console.error("User location or distance not available.");
       Swal.fire({
         title: "Error!",
         text: "Tidak bisa mendapatkan lokasi. Pastikan izin lokasi diaktifkan.",
         icon: "error",
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
       });
     }
   };
@@ -203,7 +223,7 @@ const AreaWebcam = ({  masuk = false }) => {
         },
         body: JSON.stringify({
           image: imageSrc,
-          no_induk: localStorage.getItem("nik")
+          no_induk: localStorage.getItem("nik"),
         }),
       });
 
@@ -219,9 +239,15 @@ const AreaWebcam = ({  masuk = false }) => {
             icon: "success",
             confirmButtonText: "Absen",
             preConfirm: async () => {
+<<<<<<< HEAD
               await handleCheck(masuk); // Call HandlePost
               window.location.href = 'http://localhost:5173/'; // Redirect after HandlePost
             }
+=======
+              await HandlePost(); // Call HandlePost
+              window.location.href = "http://localhost:5173/home"; // Redirect after HandlePost
+            },
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
           });
         } else {
           Swal.fire({
@@ -234,7 +260,9 @@ const AreaWebcam = ({  masuk = false }) => {
       } else if (data.status === "error") {
         Swal.fire({
           title: "Error!",
-          text: data.response || "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
+          text:
+            data.response ||
+            "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -268,10 +296,10 @@ const AreaWebcam = ({  masuk = false }) => {
         ref={webcamRef}
         onPlay={handleVideoPlay}
       />
-      <canvas ref={canvasRef} style={{ position: 'absolute' }} />
+      <canvas ref={canvasRef} style={{ position: "absolute" }} />
       <button
         onClick={capture}
-        className={isFaceDetected ? 'enabled' : 'disabled'}
+        className={isFaceDetected ? "enabled" : "disabled"}
         disabled={!isFaceDetected}
       >
         Ambil Gambar
