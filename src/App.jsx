@@ -4,6 +4,7 @@ import BaseLayout from "./layout/BaseLayout";
 import AdminLayout from "./layout/AdminLayout";
 import ProtectedRoute from "./screens/adminlogin/ProtectedRoute";
 import ProtectKaryawan from "./components/areaUser/areaUserLogin/ProtectKaryawan";
+import UserCheckOut from "./screens/user/UserCheckOut";
 import { Dashboard, PageNotFound, Izin, Karyawan, KaryawanEdit, AdminLogin, UserHome, UserEdit, UserIzin, UserLoading, UserAbsen, UserRegistrasi, UserLogin } from "./screens/";
 
 function App() {
@@ -28,9 +29,9 @@ function App() {
             <Route path="/loginadmin" element={<AdminLogin />} />
           </Route>
             <Route path="/admin/karyawan/edit/:id" element={<KaryawanEdit />} />
-            <Route path="/home/edit" element={<UserEdit />} />
             <Route path="/home/izin" element={<UserIzin />} />
             <Route path="/home/absen" element={<UserAbsen />} />
+            <Route path="/home/keluar" element={<UserCheckOut />} />
             <Route path="/home/loading" element={<UserLoading />} />
             <Route path="/registrasi" element={<UserRegistrasi />} />
             <Route path="/login" element={<UserLogin />} />

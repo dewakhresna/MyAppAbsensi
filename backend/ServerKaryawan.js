@@ -77,10 +77,9 @@ app.post('/api/login', (req, res) => {
       console.error('Error checking login credentials:', err);
       return res.status(500).send(err);
     }
-
     if (results.length > 0) {
-      const { nama, nik } = results[0]; // Ambil nama dan nik dari hasil query
-      res.json({ success: true, message: 'Login berhasil', nama, nik }); // Kirim nama dan nik ke frontend
+      const { id, nama, nik } = results[0]; // Ambil nama dan nik dari hasil query
+      res.json({ success: true, message: 'Login berhasil', nama, nik, id }); // Kirim nama dan nik ke frontend
     } else {
       res.json({ success: false, message: 'Email atau password salah' });
     }
@@ -105,17 +104,20 @@ app.get('/api/readKaryawan/:id', (req, res) => {
 
 // update
 app.put('/api/update/:id', upload.single('gambar'), (req, res) => {
+  console.log('Request Body:', req.body);
+  console.log('Request File:', req.file);
+  
   const { id } = req.params;
   const { nik, email, nama, kelamin, hp, password } = req.body;
-  const gambarPath = req.file ? req.file.filename : null; // Nama file gambar jika ada
+  const gambarPath = req.file ? req.file.filename : null;
+  const gambarUpdate = gambarPath || req.body.existingGambar;
 
-  // Query SQL untuk update data di database
   const sql = `
     UPDATE data_karyawan
     SET nik = ?, email = ?, nama = ?, kelamin = ?, gambar = ?, hp = ?, password = ?
     WHERE id = ?
   `;
-  db.query(sql, [nik, email, nama, kelamin, gambarPath, hp, password, id], (err, result) => {
+  db.query(sql, [nik, email, nama, kelamin, gambarUpdate, hp, password, id], (err, result) => {
     if (err) {
       console.error('Error updating data:', err);
       return res.status(500).send(err);
@@ -123,6 +125,7 @@ app.put('/api/update/:id', upload.single('gambar'), (req, res) => {
     res.json({ success: true, message: 'Data successfully updated' });
   });
 });
+
 
 //delete
 app.delete('/api/delete/:id', (req, res) => {
@@ -140,20 +143,61 @@ app.delete('/api/delete/:id', (req, res) => {
 
 //tambah hadir
 app.post('/api/karyawan_hadir', (req, res) => {
-  const { nama, nik } = req.body; // Hanya menerima nama
+  const { nama, nik } = req.body;
 
-  // Menggunakan DATE(NOW()) dan TIME(NOW()) untuk mendapatkan tanggal dan jam saat ini
-  const sql = 'INSERT INTO karyawan_hadir (nama, nik, tanggal, jam) VALUES (?, ?, DATE(NOW()), TIME(NOW()))';
-  db.query(sql, [nama, nik], (err, result) => {
-    if (err) {
-      console.error('Error inserting data:', err);
-      return res.status(500).send(err);
+  const query = `
+    INSERT INTO absensi (nama, nik, check_in, tanggal, keterangan)
+    VALUES (?, ?, CURTIME(), CURDATE(),
+    CASE
+        WHEN CURTIME() <= '08:00:00' THEN 'Tepat Waktu'
+        ELSE 'Terlambat'
+    END
+);`;
+  db.query(query, [nama, nik], (error) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Gagal melakukan check-in' });
     }
-    res.json({ success: true, message: 'Data successfully inserted' });
+    res.json({ success: true, message: 'Check-in berhasil' });
   });
 });
 
 
+
+app.put('/api/karyawan_keluar/:id', (req, res) => {
+  const { id, nik } = req.body;
+
+  const query = `
+    UPDATE absensi
+    SET check_out = CURTIME()
+    WHERE id = ? AND nik = ? AND check_out IS NULL;
+  `;
+
+  db.query(query, [id, nik], (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Gagal melakukan check-out' });
+    }
+
+    if (result.affectedRows > 0) {
+      res.json({ success: true, message: 'Check-out berhasil' });
+    } else {
+      res.json({ success: false, message: 'Gagal melakukan check-out atau sudah check-out sebelumnya.' });
+    }
+  });
+});
+
+//read absen
+app.get('/api/readAbsensi', (req, res) => {
+  const sql = 'SELECT * FROM absensi';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return res.status(500).send(err);
+    }
+    res.json(results);
+  });
+});
 
 // Menjalankan server
 app.listen(port, () => {

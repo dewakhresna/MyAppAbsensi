@@ -62,7 +62,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
       formData.append('gambar', gambar);
     } else if (isEditMode && currentGambar) {
       // Tambahkan nama gambar yang sudah ada di server jika tidak memilih gambar baru
-      formData.append('gambar', currentGambar);
+      formData.append('existingGambar', currentGambar);
     }
   
     // Validasi data
@@ -99,7 +99,9 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
   
       if (data.success) {
         alert(isEditMode ? "Update user berhasil." : "Registrasi user berhasil.");
-        window.location.href = isEditMode ? "/admin/karyawan" : "/login";
+        if (!isEditMode) {
+          window.location.href = "/login";
+        }
       } else {
         setError(isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.");
       }
@@ -168,16 +170,38 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
               required
             />
           </div>
-
-          <div className="input-group">
-            <input
-              type="text"
-              id="gambar"
-              value={currentGambar}
-              onChange={(e) => setCurrentGambar(e.target.value)}
-              style={{ display: 'none' }}
-            />
+          {isEditMode && (
+            <>
+              <div className="input-group">
+                <label htmlFor="gambarRegis">Foto Registrasi</label>
+                  <input
+                    type="file"
+                    id="gambarRegis"
+                    onChange={handleFileChange}
+                  />
+               {currentGambar && (
+                <div>
+                  <img
+                    src={`../../../../backend/uploads/${currentGambar}`} // Sesuaikan URL sesuai path server Anda
+                    alt="Gambar yang diunggah"
+                    style={{ width: '100px', height: '100px' }} // Anda bisa mengatur ukuran gambar
+                  />
+                </div>
+                
+              )}
           </div>
+            <div className="input-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="text"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+            )}
           {!isEditMode && (
             <>
             <div className="input-group">

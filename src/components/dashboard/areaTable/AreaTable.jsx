@@ -1,4 +1,4 @@
-import AreaTableAction from "./AreaTableAction";
+import React, { useState, useEffect } from "react";
 import "./AreaTable.scss";
 
 const TABLE_HEADS = [
@@ -11,40 +11,26 @@ const TABLE_HEADS = [
   "Keterangan",
 ];
 
-const TABLE_DATA = [
-  {
-    id: 101,
-    no: 1,
-    no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Aug 29,2024",
-    cekin: "09.00",
-    cekout: "17.00",
-    keterangan: "Tepat Waktu",
-  },
-  {
-    id: 101,
-    no: 2,
-    no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Aug 29,2024",
-    cekin: "11.00",
-    cekout: "17.00",
-    keterangan: "Terlambat",
-  },
-  {
-    id: 101,
-    no: 3,
-    no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
-    tanggal: "Aug 29,2024",
-    cekin: "08.45",
-    cekout: "17.00",
-    keterangan: "Tepat Waktu",
-  },
-];
-
 const AreaTable = () => {
+  const [absensidata, setabsensidata] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/readAbsensi");
+        if (!response.ok) throw new Error("Gagal mengambil data dari server");
+
+        const data = await response.json();
+        setabsensidata(data);
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <section className="content-area-table">
       <div className="data-table-info">
@@ -53,39 +39,34 @@ const AreaTable = () => {
       <div className="data-table-diagram">
         <table>
           <thead>
-            <tr>
-              {TABLE_HEADS?.map((th, index) => (
-                <th key={index}>{th}</th>
-              ))}
-            </tr>
+              <tr>
+                {TABLE_HEADS.map((th, index) => (
+                  <th key={index}>{th}</th>
+                ))}
+              </tr>
           </thead>
           <tbody>
-            {TABLE_DATA?.map((dataAbsensi) => {
-              return (
-                <tr key={dataAbsensi.id}>
-                  <td>{dataAbsensi.no}</td>
-                  <td>{dataAbsensi.no_induk}</td>
-                  <td>{dataAbsensi.nama}</td>
-                  <td>{dataAbsensi.tanggal}</td>
-                  <td>{dataAbsensi.cekin}</td>
-                  <td>{dataAbsensi.cekout}</td>
+          {absensidata.map((absendata, index) => (
+                <tr key={absendata.id}>
+                  <td>{index + 1}</td>
+                  <td>{absendata.nik}</td>
+                  <td>{absendata.nama}</td>
+                  <td>{new Date(absendata.tanggal).toLocaleDateString("en-GB")}</td>
+                  <td>{absendata.check_in}</td>
+                  <td>{absendata.check_out}</td>
                   {/* <td>${dataAbsensi.amount.toFixed(2)}</td> */}
                   <td>
                     <div className="dt-status">
                       <span
-                        className={`dt-status-dot dot-${dataAbsensi.keterangan}`}
+                        className={`dt-status-dot dot-${absendata.Keterangan}`}
                       ></span>
                       <span className="dt-status-text">
-                        {dataAbsensi.keterangan}
+                        {absendata.Keterangan}
                       </span>
                     </div>
                   </td>
-                  {/* <td className="dt-cell-action">
-                    <AreaTableAction />
-                  </td> */}
                 </tr>
-              );
-            })}
+            ))}
           </tbody>
         </table>
       </div>

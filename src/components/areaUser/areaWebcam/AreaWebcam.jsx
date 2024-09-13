@@ -10,30 +10,44 @@ const OFFICE_LONGITUDE = 107.03520440413142;
 
 const MAX_DISTANCE_METERS = 10;
 
-const HandlePost = async () => {
+const handleCheck = async ({ masuk = false }) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
+  const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
+
+  const url = masuk 
+    ? "http://localhost:3001/api/karyawan_hadir" 
+    : `http://localhost:3001/api/karyawan_keluar/${id}`;
+  
+  const method = masuk ? "POST" : "PUT";
+  const body = masuk 
+    ? JSON.stringify({ nama, nik }) 
+    : JSON.stringify({ id, nik });
+
   try {
-    const response = await fetch('http://localhost:3001/api/karyawan_hadir', {
-      method: 'POST',
+    const response = await fetch(url, {
+      method,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nama, nik }), // Hanya mengirim nama
+      body,
     });
 
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      alert('Absen berhasil!');
+      alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
     } else {
-      alert('Gagal absen.');
+      alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
     }
   } catch (error) {
     console.error('Error:', error);
     alert('Gagal mengirim data.');
   }
-}
+};
+
+
+
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3; // Radius bumi dalam meter
@@ -51,7 +65,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = () => {
+const AreaWebcam = ({  masuk = false }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -205,7 +219,7 @@ const AreaWebcam = () => {
             icon: "success",
             confirmButtonText: "Absen",
             preConfirm: async () => {
-              await HandlePost(); // Call HandlePost
+              await handleCheck(masuk); // Call HandlePost
               window.location.href = 'http://localhost:5173/'; // Redirect after HandlePost
             }
           });
