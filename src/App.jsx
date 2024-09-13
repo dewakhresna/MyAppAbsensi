@@ -34,7 +34,7 @@ function App() {
             <Route path="/home/loading" element={<UserLoading />} />
             <Route path="/registrasi" element={<UserRegistrasi />} />
             <Route path="/login" element={<UserLogin />} />
-            {/* <Route path="/home" element={<UserHome />} /> */}
+            <Route path="/" element={<UserLogin />} />
             <Route
             path="/home"
               element={

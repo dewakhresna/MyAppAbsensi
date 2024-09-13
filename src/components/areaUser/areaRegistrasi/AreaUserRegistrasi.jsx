@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AreaUserRegistrasi.scss"; // Custom styles for the registration page
 import { useParams } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 const AreaUserRegistrasi = ({ isEditMode = false }) => {
   const [nomorInduk, setNomorInduk] = useState("");
@@ -98,13 +99,27 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
       }
   
       if (data.success) {
-        alert(isEditMode ? "Update user berhasil." : "Registrasi user berhasil.");
-        window.location.href = isEditMode ? "/admin/karyawan" : "/login";
+        Swal.fire({
+          title: isEditMode ? "Berhasil Mengubah Data" : "Registrasi user berhasil.",
+          text: isEditMode ? "Data Anda telah diubah." : "Data Anda telah terdaftar.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.href = isEditMode ? "/admin/karyawan" : "/login";
+        });
       } else {
-        setError(isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.");
+        Swal.fire({
+          title: isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.",
+          text: `Terjadi kesalahan: ${error.message}`,
+          icon: "error",
+        });
       }
     } catch (error) {
-      setError(`Terjadi kesalahan: ${error.message}`);
+      Swal.fire({
+        title: "Error!",
+        text: `Terjadi kesalahan: ${error.message}`,
+        icon: "error",
+      });
     }
   };
   

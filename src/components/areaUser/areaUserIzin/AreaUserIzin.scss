@@ -1,0 +1,81 @@
+// Container for the izin form
+.user-izin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;;
+
+  .izin-box {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 30px;
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      .input-group {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: bold;
+          color: #555;
+        }
+
+        input[type="file"] {
+          padding: 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+        }
+
+        select,
+        textarea {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          font-size: 14px;
+        }
+
+        select {
+          cursor: pointer;
+        }
+
+        textarea {
+          min-height: 100px;
+          resize: vertical;
+        }
+      }
+
+      .izin-button {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  }
+}
