@@ -162,18 +162,16 @@ app.post('/api/karyawan_hadir', (req, res) => {
   });
 });
 
-
-
-app.put('/api/karyawan_keluar/:id', (req, res) => {
-  const { id, nik } = req.body;
+app.put('/api/karyawan_keluar/:nik', (req, res) => {
+  const { nik } = req.body;
 
   const query = `
     UPDATE absensi
     SET check_out = CURTIME()
-    WHERE id = ? AND nik = ? AND check_out IS NULL;
+    WHERE nik = ? AND check_out IS NULL;
   `;
 
-  db.query(query, [id, nik], (error, result) => {
+  db.query(query, [nik], (error, result) => {
     if (error) {
       console.error(error);
       return res.status(500).json({ success: false, message: 'Gagal melakukan check-out' });

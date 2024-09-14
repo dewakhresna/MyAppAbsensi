@@ -17,17 +17,15 @@ const handleCheck = async ({ masuk = false }) => {
 
   const url = masuk 
     ? "http://localhost:3001/api/karyawan_hadir" 
-    : `http://localhost:3001/api/karyawan_keluar/${id}`;
+    : `http://localhost:3001/api/karyawan_keluar/${nik}`;
   
   const method = masuk ? "POST" : "PUT";
   const body = masuk 
     ? JSON.stringify({ nama, nik }) 
-    : JSON.stringify({ id, nik });
-
+    : JSON.stringify({ nik });
   try {
-
-    const response = await fetch("http://localhost:3001/api/karyawan_hadir", {
-      method: "POST",
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
       },
@@ -37,9 +35,9 @@ const handleCheck = async ({ masuk = false }) => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      alert("Absen berhasil!");
+      alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
     } else {
-      alert("Gagal absen.");
+      alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
     }
   } catch (error) {
     console.error("Error:", error);
@@ -223,7 +221,7 @@ const AreaWebcam = ({  masuk = false }) => {
             icon: "success",
             confirmButtonText: "Absen",
             preConfirm: async () => {
-              await HandlePost(); // Call HandlePost
+              await handleCheck(masuk); // Call HandlePost
               window.location.href = "http://localhost:5173/home"; // Redirect after HandlePost
             },
           });
