@@ -70,7 +70,7 @@ const Sidebar = () => {
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" />
-          <span className="sidebar-brand-text">Absensi</span>
+          <span className="sidebar-brand-text">ADMIN HOME</span>
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
@@ -103,7 +103,7 @@ const Sidebar = () => {
                 <span className="menu-link-text">Izin / Sakit</span>
               </Link>
             </li>
-            <li className="menu-item">
+            {/* <li className="menu-item">
               <Link
                 to="/"
                 className={`menu-link ${activeItem === "/chartabsensi" ? "active" : ""}`}
@@ -114,7 +114,7 @@ const Sidebar = () => {
                 </span>
                 <span className="menu-link-text">Chart Absensi</span>
               </Link>
-            </li>
+            </li> */}
             <li className="menu-item">
               <Link
                 to="/admin/karyawan"

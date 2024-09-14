@@ -58,7 +58,11 @@ const AreaTable = () => {
                   <td>
                     <div className="dt-status">
                       <span
-                        className={`dt-status-dot dot-${absendata.Keterangan}`}
+                        className={`dt-status-dot ${
+                          dataAbsensi.keterangan === "Terlambat"
+                            ? "dot-terlambat"
+                            : "dot-tepatwaktu"
+                        }`}
                       ></span>
                       <span className="dt-status-text">
                         {absendata.Keterangan}
