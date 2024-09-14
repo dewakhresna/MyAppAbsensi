@@ -25,13 +25,9 @@ const handleCheck = async ({ masuk = false }) => {
     : JSON.stringify({ id, nik });
 
   try {
-<<<<<<< HEAD
-    const response = await fetch(url, {
-      method,
-=======
+
     const response = await fetch("http://localhost:3001/api/karyawan_hadir", {
       method: "POST",
->>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,27 +37,15 @@ const handleCheck = async ({ masuk = false }) => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-<<<<<<< HEAD
-      alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
-    } else {
-      alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
-=======
       alert("Absen berhasil!");
     } else {
       alert("Gagal absen.");
->>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
     }
   } catch (error) {
     console.error("Error:", error);
     alert("Gagal mengirim data.");
   }
 };
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3; // Radius bumi dalam meter
@@ -239,15 +223,9 @@ const AreaWebcam = ({  masuk = false }) => {
             icon: "success",
             confirmButtonText: "Absen",
             preConfirm: async () => {
-<<<<<<< HEAD
-              await handleCheck(masuk); // Call HandlePost
-              window.location.href = 'http://localhost:5173/'; // Redirect after HandlePost
-            }
-=======
               await HandlePost(); // Call HandlePost
               window.location.href = "http://localhost:5173/home"; // Redirect after HandlePost
             },
->>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
           });
         } else {
           Swal.fire({

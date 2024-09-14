@@ -99,12 +99,6 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
       }
   
       if (data.success) {
-<<<<<<< HEAD
-        alert(isEditMode ? "Update user berhasil." : "Registrasi user berhasil.");
-        if (!isEditMode) {
-          window.location.href = "/login";
-        }
-=======
         Swal.fire({
           title: isEditMode ? "Berhasil Mengubah Data" : "Registrasi user berhasil.",
           text: isEditMode ? "Data Anda telah diubah." : "Data Anda telah terdaftar.",
@@ -113,7 +107,6 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
         }).then(() => {
           window.location.href = isEditMode ? "/admin/karyawan" : "/login";
         });
->>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
       } else {
         Swal.fire({
           title: isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.",
