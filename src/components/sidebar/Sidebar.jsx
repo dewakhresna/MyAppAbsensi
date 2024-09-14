@@ -15,7 +15,7 @@ import {
   MdOutlineSettings,
   MdOutlineShoppingBag,
 } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
 
@@ -24,6 +24,7 @@ const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
   const navbarRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate(); 
   
   // State to track the currently active menu item
   const [activeItem, setActiveItem] = useState(location.pathname);
@@ -39,8 +40,14 @@ const Sidebar = () => {
     }
   };
 
+  // useEffect(() => {
+  //   localStorage.removeItem("admin");
+  // }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("admin");
+    console.log("Admin removed from localStorage");
+    navigate("/loginadmin"); 
   };
 
   useEffect(() => {

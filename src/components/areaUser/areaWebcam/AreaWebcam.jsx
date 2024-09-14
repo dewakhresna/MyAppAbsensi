@@ -10,30 +10,58 @@ const OFFICE_LONGITUDE = 107.03520440413142;
 
 const MAX_DISTANCE_METERS = 10;
 
-const HandlePost = async () => {
+const handleCheck = async ({ masuk = false }) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
+  const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
+
+  const url = masuk 
+    ? "http://localhost:3001/api/karyawan_hadir" 
+    : `http://localhost:3001/api/karyawan_keluar/${id}`;
+  
+  const method = masuk ? "POST" : "PUT";
+  const body = masuk 
+    ? JSON.stringify({ nama, nik }) 
+    : JSON.stringify({ id, nik });
+
   try {
+<<<<<<< HEAD
+    const response = await fetch(url, {
+      method,
+=======
     const response = await fetch("http://localhost:3001/api/karyawan_hadir", {
       method: "POST",
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ nama, nik }), // Hanya mengirim nama
+      body,
     });
 
     const data = await response.json();
     console.log(data);
     if (data.success) {
+<<<<<<< HEAD
+      alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
+    } else {
+      alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
+=======
       alert("Absen berhasil!");
     } else {
       alert("Gagal absen.");
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
     }
   } catch (error) {
     console.error("Error:", error);
     alert("Gagal mengirim data.");
   }
 };
+<<<<<<< HEAD
+
+
+
+=======
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371e3; // Radius bumi dalam meter
@@ -51,7 +79,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = () => {
+const AreaWebcam = ({  masuk = false }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -211,9 +239,15 @@ const AreaWebcam = () => {
             icon: "success",
             confirmButtonText: "Absen",
             preConfirm: async () => {
+<<<<<<< HEAD
+              await handleCheck(masuk); // Call HandlePost
+              window.location.href = 'http://localhost:5173/'; // Redirect after HandlePost
+            }
+=======
               await HandlePost(); // Call HandlePost
               window.location.href = "http://localhost:5173/home"; // Redirect after HandlePost
             },
+>>>>>>> c7081fc093a92a60b27aad0f70fd6f44f8a17630
           });
         } else {
           Swal.fire({

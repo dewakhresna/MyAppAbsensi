@@ -16,14 +16,16 @@ const AreaUserHome = () => {
     localStorage.removeItem("sukses");
     localStorage.removeItem("nama");
     localStorage.removeItem("nik");
+    localStorage.removeItem("id");
   };
 
+  const id = localStorage.getItem("id");
   return (
     <div className="area-user-home">
       <div className="user-home-container">
         <div className="user-home-header">
           <h1>Nama Karyawan</h1>
-          <Link to="/home/edit" className="menu-link-edit">
+          <Link to={`/admin/karyawan/edit/${id}`} className="menu-link-edit">
             <span className="menu-link-icon-edit">
               <MdOutlinePermIdentity size={18} />
             </span>
@@ -62,7 +64,7 @@ const AreaUserHome = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/home/absen" className="menu-link">
+              <Link to="/home/keluar" className="menu-link">
                 <span className="menu-link-icon">
                   <MdKeyboardDoubleArrowLeft size={18} />
                 </span>

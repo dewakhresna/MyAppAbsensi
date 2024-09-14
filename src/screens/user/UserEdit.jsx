@@ -3,11 +3,11 @@ import { useParams } from 'react-router-dom';
 import { AreaUserRegistrasi } from "../../components";
 
 const UserEdit = () => {
-    const { userId } = useParams(); // Ambil userId dari URL params
+    const { userId } = localStorage.getItem(id);
 
     return (
         <div className="content-area">
-            <AreaUserRegistrasi isEditMode={true} userId={userId} />
+            <AreaUserRegistrasi isEditMode={true} usersID={userId} />
         </div>
     );
 };

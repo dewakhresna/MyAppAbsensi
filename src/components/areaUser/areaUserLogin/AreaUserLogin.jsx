@@ -25,6 +25,7 @@ const AreaUserLogin = () => {
       if (data.success) {
         console.log("Login berhasil");
         localStorage.setItem("sukses", "karyawan");
+        localStorage.setItem("id", data.id);
         localStorage.setItem("nama", data.nama);
         localStorage.setItem("nik", data.nik);
         navigate("/home");

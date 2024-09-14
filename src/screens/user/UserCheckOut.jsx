@@ -3,7 +3,7 @@ import { AreaWebcam } from "../../components";
 const UserAbsen = () => {
   return (
     <div className="content-area">
-      <AreaWebcam masuk={true} />
+      <AreaWebcam masuk={false} />
     </div>
   );
 };
