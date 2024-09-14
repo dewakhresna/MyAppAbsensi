@@ -1,5 +1,6 @@
-import AreaIzinAction from "./AreaIzinAction";
 import "./AreaIzin.scss";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const TABLE_HEADS = [
   "No",
@@ -16,7 +17,7 @@ const TABLE_DATA = [
     id: 101,
     no: 1,
     no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
+    nama: "I Dewa Gede",
     tanggal: "Aug 29,2024",
     keterangan: "Sakit",
     alasan: "-",
@@ -26,7 +27,7 @@ const TABLE_DATA = [
     id: 102,
     no: 2,
     no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
+    nama: "Khresna Bayu",
     tanggal: "Aug 29,2024",
     keterangan: "Izin",
     alasan: "Acara Keluarga",
@@ -36,7 +37,7 @@ const TABLE_DATA = [
     id: 103,
     no: 3,
     no_induk: "11232",
-    nama: "I Dewa Gede Khresna Bayu",
+    nama: "Bayu Dermawan",
     tanggal: "Aug 29,2024",
     keterangan: "Izin",
     alasan: "Acara Keluarga",
@@ -45,6 +46,21 @@ const TABLE_DATA = [
 ];
 
 const AreaIzin = () => {
+  const handleAlasan = async (dataIzin) => {
+    Swal.fire({
+      title: "Alasan Izin / Sakit",
+      text: dataIzin.alasan,
+    });
+  }
+  const handleSurat = async (dataIzin) => {
+    Swal.fire({
+      title: "Surat Dokter",
+      imageUrl: dataIzin.surat, //ganti dengan url surat dokter 
+      imageHeight: 300,
+      imageWidth: 300,
+      imageAlt: "Tidak Ada Surat Dokter",
+    });
+  }
   return (
     <section className="content-area-table">
       <div className="data-table-info">
@@ -68,21 +84,9 @@ const AreaIzin = () => {
                   <td>{dataIzin.nama}</td>
                   <td>{dataIzin.tanggal}</td>
                   <td>{dataIzin.keterangan}</td>
-                  <td className="dt-cell-action">
-                    <AreaIzinAction />
-                  </td>
-                  <td>{dataIzin.surat}</td>
-                  {/* <td>${dataIzin.amount.toFixed(2)}</td> */}
-                  {/* <td>
-                    <div className="dt-status">
-                      <span
-                        className={`dt-status-dot dot-${dataIzin.keterangan}`}
-                      ></span>
-                      <span className="dt-status-text">
-                        {dataIzin.keterangan}
-                      </span>
-                    </div>
-                  </td> */}
+                  <td><Link onClick={() => handleAlasan(dataIzin)} className="dropdown-menu-link">Lihat</Link></td>
+                  <td>{dataIzin.keterangan === "Izin" ? ("-") : (<Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">Lihat</Link>)}</td>
+                  {/* <td><Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">Lihat</Link></td> */}
                 </tr>
               );
             })}

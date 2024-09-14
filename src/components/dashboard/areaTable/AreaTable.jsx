@@ -1,4 +1,3 @@
-import AreaTableAction from "./AreaTableAction";
 import "./AreaTable.scss";
 
 const TABLE_HEADS = [
@@ -23,7 +22,7 @@ const TABLE_DATA = [
     keterangan: "Tepat Waktu",
   },
   {
-    id: 101,
+    id: 102,
     no: 2,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
@@ -33,7 +32,7 @@ const TABLE_DATA = [
     keterangan: "Terlambat",
   },
   {
-    id: 101,
+    id: 103,
     no: 3,
     no_induk: "11232",
     nama: "I Dewa Gede Khresna Bayu",
@@ -69,20 +68,20 @@ const AreaTable = () => {
                   <td>{dataAbsensi.tanggal}</td>
                   <td>{dataAbsensi.cekin}</td>
                   <td>{dataAbsensi.cekout}</td>
-                  {/* <td>${dataAbsensi.amount.toFixed(2)}</td> */}
                   <td>
                     <div className="dt-status">
                       <span
-                        className={`dt-status-dot dot-${dataAbsensi.keterangan}`}
+                        className={`dt-status-dot ${
+                          dataAbsensi.keterangan === "Terlambat"
+                            ? "dot-terlambat"
+                            : "dot-tepatwaktu"
+                        }`}
                       ></span>
                       <span className="dt-status-text">
                         {dataAbsensi.keterangan}
                       </span>
                     </div>
                   </td>
-                  {/* <td className="dt-cell-action">
-                    <AreaTableAction />
-                  </td> */}
                 </tr>
               );
             })}
