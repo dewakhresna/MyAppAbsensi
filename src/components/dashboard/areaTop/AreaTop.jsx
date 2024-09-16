@@ -7,7 +7,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 
-const AreaTop = () => {
+const AreaTop = ({ onDateRangeChange }) => {
   const { openSidebar } = useContext(SidebarContext);
 
   const [state, setState] = useState([
@@ -38,6 +38,15 @@ const AreaTop = () => {
     };
   }, []);
 
+  // Hanya update ketika endDate dipilih
+  const handleDateChange = (item) => {
+    setState([item.selection]);
+    if (item.selection.endDate) {
+      onDateRangeChange(item.selection.startDate, item.selection.endDate);
+      setShowDatePicker(false); // Sembunyikan date picker setelah selesai memilih
+    }
+  };
+
   return (
     <section className="content-area-top">
       <div className="area-top-l">
@@ -53,14 +62,12 @@ const AreaTop = () => {
       <div className="area-top-r">
         <div
           ref={dateRangeRef}
-          className={`date-range-wrapper ${
-            !showDatePicker ? "hide-date-range" : ""
-          }`}
+          className={`date-range-wrapper ${!showDatePicker ? "hide-date-range" : ""}`}
           onClick={handleInputClick}
         >
           <DateRange
             editableDateInputs={true}
-            onChange={(item) => setState([item.selection])}
+            onChange={handleDateChange}
             moveRangeOnFirstSelection={false}
             ranges={state}
             showMonthAndYearPickers={false}

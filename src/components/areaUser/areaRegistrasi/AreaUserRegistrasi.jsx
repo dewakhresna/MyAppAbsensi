@@ -103,7 +103,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
           title: isEditMode ? "Berhasil Mengubah Data" : "Registrasi user berhasil.",
           text: isEditMode ? "Data Anda telah diubah." : "Data Anda telah terdaftar.",
           icon: "success",
-          confirmButtonText: "OK",
+          confirmButtonText: "Oke",
         }).then(() => {
           window.location.href = isEditMode ? "/admin/karyawan" : "/login";
         });
@@ -112,6 +112,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
           title: isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.",
           text: `Terjadi kesalahan: ${error.message}`,
           icon: "error",
+          confirmButtonText: "Kembali", 
         });
       }
     } catch (error) {
@@ -119,6 +120,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
         title: "Error!",
         text: `Terjadi kesalahan: ${error.message}`,
         icon: "error",
+        confirmButtonText: "Kembali",
       });
     }
   };

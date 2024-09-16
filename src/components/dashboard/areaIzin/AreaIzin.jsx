@@ -86,7 +86,6 @@ const AreaIzin = () => {
                   <td>{dataIzin.keterangan}</td>
                   <td><Link onClick={() => handleAlasan(dataIzin)} className="dropdown-menu-link">Lihat</Link></td>
                   <td>{dataIzin.keterangan === "Izin" ? ("-") : (<Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">Lihat</Link>)}</td>
-                  {/* <td><Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">Lihat</Link></td> */}
                 </tr>
               );
             })}

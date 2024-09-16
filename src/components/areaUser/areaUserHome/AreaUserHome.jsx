@@ -24,7 +24,7 @@ const AreaUserHome = () => {
     <div className="area-user-home">
       <div className="user-home-container">
         <div className="user-home-header">
-          <h1>Nama Karyawan</h1>
+          <h1>Nama Karyawan</h1> {/* ganti pake nama user nya h1 */}
           <Link to={`/admin/karyawan/edit/${id}`} className="menu-link-edit">
             <span className="menu-link-icon-edit">
               <MdOutlinePermIdentity size={18} />
@@ -37,19 +37,19 @@ const AreaUserHome = () => {
             <span className="menu-link-icon">
               <MdCoPresent size={18} />
             </span>
-            <span className="status-card-text">10 Hadir</span>
+            <span className="status-card-text">10 Hadir</span> {/* ganti sesuai user nya */}
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdDeviceThermostat size={18} />
             </span>
-            <span className="status-card-text">1 Sakit</span>
+            <span className="status-card-text">1 Sakit</span> {/* ganti sesuai user nya */}
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdEmail size={18} />
             </span>
-            <span className="status-card-text">0 Izin</span>
+            <span className="status-card-text">0 Izin</span> {/* ganti sesuai user nya */}
           </div>
         </div>
 

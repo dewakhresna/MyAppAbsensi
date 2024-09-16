@@ -35,13 +35,29 @@ const handleCheck = async ({ masuk = false }) => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
+      Swal.fire({
+        title: masuk ? "Check-in berhasil!" : "Check-out berhasil!",
+        icon: "success",
+        confirmButtonText: "Oke",
+      })
+      // alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
     } else {
-      alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
+      Swal.fire({
+        title: masuk ? "Gagal check-in." : "Gagal check-out.",
+        icon: "error",
+        confirmButtonText: "Kembali",
+      })
+      // alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
     }
   } catch (error) {
     console.error("Error:", error);
-    alert("Gagal mengirim data.");
+    Swal.fire({
+      title: "Error!",
+      text: `Gagal mengirim data: ${error}`,
+      icon: "error",
+      confirmButtonText: "Kembali",
+    });
+    // alert("Gagal mengirim data.");
   }
 };
 
@@ -172,7 +188,7 @@ const AreaWebcam = ({  masuk = false }) => {
           title: "Error!",
           text: "Anda berada terlalu jauh dari lokasi yang ditentukan",
           icon: "error",
-          confirmButtonText: "OK",
+          confirmButtonText: "Oke",
         });
         return; // Hentikan eksekusi jika jarak melebihi batas
       }
@@ -190,7 +206,7 @@ const AreaWebcam = ({  masuk = false }) => {
         title: "Error!",
         text: "Tidak bisa mendapatkan lokasi. Pastikan izin lokasi diaktifkan.",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "Kembali",
       });
     }
   };
@@ -230,7 +246,7 @@ const AreaWebcam = ({  masuk = false }) => {
             title: "Verification Failed!",
             text: "Wajah Anda Tidak Sesuai. Mohon Ulangi Lagi.",
             icon: "error",
-            confirmButtonText: "OK",
+            confirmButtonText: "Kembali",
           });
         }
       } else if (data.status === "error") {
@@ -240,7 +256,7 @@ const AreaWebcam = ({  masuk = false }) => {
             data.response ||
             "Terjadi kesalahan saat memproses gambar. Mohon Ulangi Lagi.",
           icon: "error",
-          confirmButtonText: "OK",
+          confirmButtonText: "Kembali",
         });
       }
     } catch (error) {
@@ -249,7 +265,7 @@ const AreaWebcam = ({  masuk = false }) => {
         title: "Error!",
         text: "Terjadi kesalahan saat mengirim gambar. Mohon Ulangi Lagi",
         icon: "error",
-        confirmButtonText: "OK",
+        confirmButtonText: "Kembali",
       });
     } finally {
       setLoading(false); // Set loading ke false setelah selesai

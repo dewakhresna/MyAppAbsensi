@@ -1,12 +1,20 @@
-import { AreaCards, AreaCharts, AreaTable, AreaTop } from "../../components";
+import { useState } from "react";
+import { AreaTable, AreaTop } from "../../components";
 
 const Dashboard = () => {
+  const [dateRange, setDateRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  });
+
+  const handleDateRangeChange = (startDate, endDate) => {
+    setDateRange({ startDate, endDate });
+  };
+
   return (
     <div className="content-area">
-      <AreaTop />
-      {/* <AreaCards /> */}
-      {/* <AreaCharts /> */}
-      <AreaTable />
+      <AreaTop onDateRangeChange={handleDateRangeChange} />
+      <AreaTable startDate={dateRange.startDate} endDate={dateRange.endDate} />
     </div>
   );
 };

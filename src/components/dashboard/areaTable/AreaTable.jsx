@@ -11,8 +11,9 @@ const TABLE_HEADS = [
   "Keterangan",
 ];
 
-const AreaTable = () => {
+const AreaTable = ({ startDate, endDate }) => {
   const [absensidata, setabsensidata] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +23,6 @@ const AreaTable = () => {
 
         const data = await response.json();
         setabsensidata(data);
-        console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -30,6 +30,16 @@ const AreaTable = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const filtered = absensidata.filter((absendata) => {
+        const absensiDate = new Date(absendata.tanggal);
+        return absensiDate >= startDate && absensiDate <= endDate;
+      });
+      setFilteredData(filtered);
+    }
+  }, [startDate, endDate, absensidata]);
 
   return (
     <section className="content-area-table">
@@ -39,37 +49,34 @@ const AreaTable = () => {
       <div className="data-table-diagram">
         <table>
           <thead>
-              <tr>
-                {TABLE_HEADS.map((th, index) => (
-                  <th key={index}>{th}</th>
-                ))}
-              </tr>
+            <tr>
+              {TABLE_HEADS.map((th, index) => (
+                <th key={index}>{th}</th>
+              ))}
+            </tr>
           </thead>
           <tbody>
-          {absensidata.map((absendata, index) => (
-                <tr key={absendata.id}>
-                  <td>{index + 1}</td>
-                  <td>{absendata.nik}</td>
-                  <td>{absendata.nama}</td>
-                  <td>{new Date(absendata.tanggal).toLocaleDateString("en-GB")}</td>
-                  <td>{absendata.check_in}</td>
-                  <td>{absendata.check_out}</td>
-                  {/* <td>${dataAbsensi.amount.toFixed(2)}</td> */}
-                  <td>
-                    <div className="dt-status">
-                      <span
-                        className={`dt-status-dot ${
-                          dataAbsensi.keterangan === "Terlambat"
-                            ? "dot-terlambat"
-                            : "dot-tepatwaktu"
-                        }`}
-                      ></span>
-                      <span className="dt-status-text">
-                        {absendata.Keterangan}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
+            {filteredData.map((absendata, index) => (
+              <tr key={absendata.id}>
+                <td>{index + 1}</td>
+                <td>{absendata.nik}</td>
+                <td>{absendata.nama}</td>
+                <td>{new Date(absendata.tanggal).toLocaleDateString("en-GB")}</td>
+                <td>{absendata.check_in}</td>
+                <td>{absendata.check_out}</td>
+                <td>
+                  <div className="dt-status">
+                    <span
+                      className={`dt-status-dot ${
+                        absendata.Keterangan === "Terlambat"
+                          ? "dot-terlambat"
+                          : "dot-tepatwaktu"
+                      }`}
+                    ></span>
+                    <span className="dt-status-text">{absendata.Keterangan}</span>
+                  </div>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
