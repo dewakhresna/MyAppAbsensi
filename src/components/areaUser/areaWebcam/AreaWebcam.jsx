@@ -229,7 +229,7 @@ const AreaWebcam = ({  masuk = false }) => {
       console.log("Respons API:", data);
 
       // Menampilkan SweetAlert2 berdasarkan response API
-      if (data.status === "success") {
+      if (data.statusCode === 200) {
         if (data.response.verified) {
           Swal.fire({
             title: "Success!",
@@ -249,6 +249,13 @@ const AreaWebcam = ({  masuk = false }) => {
             confirmButtonText: "Kembali",
           });
         }
+      } else if (data.statusCode === 404) {
+        Swal.fire({
+          title: "Error!",
+          text: data.response,
+          icon: "error",
+          confirmButtonText: "OK"
+        });
       } else if (data.status === "error") {
         Swal.fire({
           title: "Error!",
