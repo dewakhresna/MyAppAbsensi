@@ -24,14 +24,19 @@ def verification():
     image = base64_to_image(image_base64)
 
     try:
-        result = verification_check(nomor_induk_karyawan=no_induk, image_form=image)
+        result = verification_check(nik=no_induk, image_form=image)
+
+        if result is None:
+            return jsonify({
+                'statusCode': 404,
+                'response': 'NIK/Foto tidak terdaftar'
+            }), 404
+        
         return jsonify({
-            'status': 'success',
-            'response': {
-                'no_induk': str(no_induk),
-                'verified': result
-            }
-        })
+            'statusCode': 200,
+            'response': result
+        }), 200
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

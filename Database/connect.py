@@ -1,15 +1,13 @@
 import pymysql
-from Database.config import load_config
-
+from Database import settings
 def connect_to_mysql():
-    config = load_config(filename="Database/mysql.ini", section="mysql")
     try:
         conn = pymysql.connect(
-            host=config.get('host'),
-            user=config.get('user'),
-            password=config.get('password'),
-            port=int(config.get('port')),
-            database=config.get('db')
+            host=settings.HOST,
+            user=settings.USER,
+            password=settings.PASSWORD,
+            port=int(settings.PORT),
+            database=settings.DB
         )
         return conn
     except Exception as e:
