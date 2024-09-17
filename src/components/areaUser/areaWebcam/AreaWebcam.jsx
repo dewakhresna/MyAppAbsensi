@@ -10,7 +10,7 @@ const OFFICE_LONGITUDE = 107.03520440413142;
 
 const MAX_DISTANCE_METERS = 10;
 
-const handleCheck = async ({ masuk = false }) => {
+const handleCheck = async ( masuk = false ) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
   const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage

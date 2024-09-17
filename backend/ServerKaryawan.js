@@ -13,7 +13,16 @@ app.use(express.json());
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Folder tempat menyimpan gambar
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Nama file unik
+  }
+});
+
+const storageSakit = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'DataSakit/');
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Nama file unik
@@ -21,6 +30,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+const uploadsakit = multer({ storage: storageSakit });
 
 // Koneksi ke database MySQL
 const db = mysql.createConnection({
@@ -196,6 +206,34 @@ app.get('/api/readAbsensi', (req, res) => {
     res.json(results);
   });
 });
+
+//insert sakit
+app.post('/api/sakit', uploadsakit.single('surat'), (req, res) => {
+  const { nik, nama, keterangan, alasan } = req.body;
+  const gambarPath = req.file ? req.file.filename :  "-"; // Nama file gambar
+
+  const sql = 'INSERT INTO dashbord_sakit (nik, nama, tanggal, keterangan, alasan, surat) VALUES (?, ?, CURDATE(), ?, ?, ?)';
+  db.query(sql, [nik, nama, keterangan, alasan, gambarPath], (err, result) => {
+    if (err) {
+      console.error('Error inserting data:', err);
+      return res.status(500).json({ success: false, message: 'Database insertion failed', error: err });
+    }
+    res.json({ success: true, message: 'Data successfully inserted' });
+  });
+});
+
+app.get('/api/readsakit', (req, res) => {
+  const sql = 'SELECT * FROM dashbord_sakit';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return res.status(500).send(err);
+    }
+    res.json(results);
+  });
+});
+
+
 
 // Menjalankan server
 app.listen(port, () => {

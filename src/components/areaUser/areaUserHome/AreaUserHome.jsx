@@ -10,8 +10,60 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import "./AreaUserHome.scss";
+import React, { useState, useEffect } from 'react';
 
 const AreaUserHome = () => {
+  const [absensiData, setAbsensiData] = useState([]);
+  const [sakitData, setSakitData] = useState([]);
+  const [jumlahhadir, setCount] = useState(0);
+  const [jumlahsakit, setCountSakit] = useState(0);
+  const [jumlahizin, setCountIzin] = useState(0);
+
+  const extractDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB");
+  };
+
+  useEffect(() => {
+    // Mengambil data dari API
+    const fetchData = async () => {
+      try {
+        const absensiResponse = await fetch('http://localhost:3001/api/readAbsensi');
+        const absensiResults = await absensiResponse.json();
+        setAbsensiData(absensiResults);
+
+        const localStorageDate = localStorage.getItem('tanggal');
+        const formattedLocalStorageDate = extractDate(localStorageDate);
+
+        const formatted = absensiResults.map(item => ({
+          ...item,
+          formattedDate: extractDate(item.tanggal)
+        }));
+        setCount(formatted.filter(data => data.formattedDate === formattedLocalStorageDate).length);
+
+        const sakitResponse = await fetch('http://localhost:3001/api/readsakit');
+        const sakitResults = await sakitResponse.json();
+        setSakitData(sakitResults);
+
+        const keterangan = sakitResults.map(item => ({
+          DataKeteranganFilter: item.keterangan,
+          formattedDateizin: extractDate(item.tanggal)
+        }));
+        
+        setCountSakit(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Sakit").length);
+        setCountIzin(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Izin").length);
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(absensiData);
+  console.log(sakitData);
+  console.log('Count:', jumlahhadir);
   const handleLogout = () => {
     localStorage.removeItem("sukses");
     localStorage.removeItem("nama");
@@ -37,19 +89,19 @@ const AreaUserHome = () => {
             <span className="menu-link-icon">
               <MdCoPresent size={18} />
             </span>
-            <span className="status-card-text">10 Hadir</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahhadir} Hadir`}</span> {/* ganti sesuai user nya */}
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdDeviceThermostat size={18} />
             </span>
-            <span className="status-card-text">1 Sakit</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahsakit} Sakit`}</span> {/* ganti sesuai user nya */}
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdEmail size={18} />
             </span>
-            <span className="status-card-text">0 Izin</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahizin} Izin`}</span> {/* ganti sesuai user nya */}
           </div>
         </div>
 

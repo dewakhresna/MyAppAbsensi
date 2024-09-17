@@ -23,11 +23,14 @@ const AreaUserLogin = () => {
 
       console.log(data);
       if (data.success) {
+        const today = new Date(); 
+        const formattedDate = today.toISOString().split('T')[0];
         console.log("Login berhasil");
         localStorage.setItem("sukses", "karyawan");
         localStorage.setItem("id", data.id);
         localStorage.setItem("nama", data.nama);
         localStorage.setItem("nik", data.nik);
+        localStorage.setItem("tanggal", formattedDate);
         navigate("/home");
       } else {
         setError("Email atau Password salah");
