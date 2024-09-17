@@ -10,7 +10,7 @@ const OFFICE_LONGITUDE = 107.03520440413142;
 
 const MAX_DISTANCE_METERS = 10;
 
-const handleCheck = async ({ masuk = false }) => {
+const handleCheck = async ( masuk = true ) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
   const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
@@ -39,15 +39,15 @@ const handleCheck = async ({ masuk = false }) => {
         title: masuk ? "Check-in berhasil!" : "Check-out berhasil!",
         icon: "success",
         confirmButtonText: "Oke",
+      }).then(function() {
+        window.location.href = "http://localhost:5173/home";
       })
-      // alert(masuk ? 'Check-in berhasil!' : 'Check-out berhasil!');
     } else {
       Swal.fire({
         title: masuk ? "Gagal check-in." : "Gagal check-out.",
         icon: "error",
         confirmButtonText: "Kembali",
       })
-      // alert(masuk ? 'Gagal check-in.' : 'Gagal check-out.');
     }
   } catch (error) {
     console.error("Error:", error);
@@ -57,7 +57,6 @@ const handleCheck = async ({ masuk = false }) => {
       icon: "error",
       confirmButtonText: "Kembali",
     });
-    // alert("Gagal mengirim data.");
   }
 };
 
@@ -77,7 +76,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = ({  masuk = false }) => {
+const AreaWebcam = ({  masuk = true }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -238,7 +237,6 @@ const AreaWebcam = ({  masuk = false }) => {
             confirmButtonText: "Absen",
             preConfirm: async () => {
               await handleCheck(masuk); // Call HandlePost
-              window.location.href = "http://localhost:5173/home"; // Redirect after HandlePost
             },
           });
         } else {
