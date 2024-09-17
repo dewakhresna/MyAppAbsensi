@@ -10,7 +10,7 @@ const OFFICE_LONGITUDE = 107.03520440413142;
 
 const MAX_DISTANCE_METERS = 10;
 
-const handleCheck = async ( masuk = true ) => {
+const handleCheck = async ( masuk = false ) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
   const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
@@ -76,7 +76,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = ({  masuk = true }) => {
+const AreaWebcam = ({  masuk = false }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);

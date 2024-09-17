@@ -7,6 +7,7 @@ const Dashboard = () => {
     endDate: new Date(),
   });
 
+  console.log(dateRange);
   const handleDateRangeChange = (startDate, endDate) => {
     setDateRange({ startDate, endDate });
   };

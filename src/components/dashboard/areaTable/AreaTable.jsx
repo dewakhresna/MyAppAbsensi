@@ -35,11 +35,14 @@ const AreaTable = ({ startDate, endDate }) => {
     if (startDate && endDate) {
       const filtered = absensidata.filter((absendata) => {
         const absensiDate = new Date(absendata.tanggal);
+        console.log(absensiDate)
         return absensiDate >= startDate && absensiDate <= endDate;
       });
       setFilteredData(filtered);
+      
     }
   }, [startDate, endDate, absensidata]);
+  
 
   return (
     <section className="content-area-table">

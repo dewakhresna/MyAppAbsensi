@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./AreaIzin.scss";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -12,55 +13,40 @@ const TABLE_HEADS = [
   "Surat",
 ];
 
-const TABLE_DATA = [
-  {
-    id: 101,
-    no: 1,
-    no_induk: "11232",
-    nama: "I Dewa Gede",
-    tanggal: "Aug 29,2024",
-    keterangan: "Sakit",
-    alasan: "-",
-    surat: "Gambar surat dokter",
-  },
-  {
-    id: 102,
-    no: 2,
-    no_induk: "11232",
-    nama: "Khresna Bayu",
-    tanggal: "Aug 29,2024",
-    keterangan: "Izin",
-    alasan: "Acara Keluarga",
-    surat: "-",
-  },
-  {
-    id: 103,
-    no: 3,
-    no_induk: "11232",
-    nama: "Bayu Dermawan",
-    tanggal: "Aug 29,2024",
-    keterangan: "Izin",
-    alasan: "Acara Keluarga",
-    surat: "-",
-  },
-];
-
 const AreaIzin = () => {
+  const [tableData, setTableData] = useState([]);
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/readsakit");
+        const data = await response.json();
+        setTableData(data); // Save the fetched data to state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleAlasan = async (dataIzin) => {
     Swal.fire({
       title: "Alasan Izin / Sakit",
       text: dataIzin.alasan,
     });
-  }
+  };
+
   const handleSurat = async (dataIzin) => {
     Swal.fire({
       title: "Surat Dokter",
-      imageUrl: dataIzin.surat, //ganti dengan url surat dokter 
+      imageUrl: `../../../../backend/DataSakit/${dataIzin.surat}`,
       imageHeight: 300,
       imageWidth: 300,
       imageAlt: "Tidak Ada Surat Dokter",
     });
-  }
+  };
   return (
     <section className="content-area-table">
       <div className="data-table-info">
@@ -76,19 +62,29 @@ const AreaIzin = () => {
             </tr>
           </thead>
           <tbody>
-            {TABLE_DATA?.map((dataIzin) => {
-              return (
-                <tr key={dataIzin.id}>
-                  <td>{dataIzin.no}</td>
-                  <td>{dataIzin.no_induk}</td>
-                  <td>{dataIzin.nama}</td>
-                  <td>{dataIzin.tanggal}</td>
-                  <td>{dataIzin.keterangan}</td>
-                  <td><Link onClick={() => handleAlasan(dataIzin)} className="dropdown-menu-link">Lihat</Link></td>
-                  <td>{dataIzin.keterangan === "Izin" ? ("-") : (<Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">Lihat</Link>)}</td>
-                </tr>
-              );
-            })}
+            {tableData?.map((dataIzin, index) => (
+              <tr key={dataIzin.id}>
+                <td>{index + 1}</td> {/* Auto-increment No */}
+                <td>{dataIzin.nik}</td>
+                <td>{dataIzin.nama}</td>
+                <td>{new Date(dataIzin.tanggal).toLocaleDateString()}</td>
+                <td>{dataIzin.keterangan}</td>
+                <td>
+                  <Link onClick={() => handleAlasan(dataIzin)} className="dropdown-menu-link">
+                    Lihat
+                  </Link>
+                </td>
+                <td>
+                  {dataIzin.keterangan === "Izin" ? (
+                    "-"
+                  ) : (
+                    <Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">
+                      Lihat
+                    </Link>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
