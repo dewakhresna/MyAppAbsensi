@@ -29,6 +29,7 @@ function App() {
             <Route path="/loginadmin" element={<AdminLogin />} />
           </Route>
             <Route path="/admin/karyawan/edit/:id" element={<KaryawanEdit />} />
+            <Route path="/home/edit/:id" element={<UserEdit />} />
             <Route path="/home/izin" element={<UserIzin />} />
             <Route path="/home/absen" element={<UserAbsen />} />
             <Route path="/home/keluar" element={<UserCheckOut />} />

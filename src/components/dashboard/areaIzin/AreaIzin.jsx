@@ -13,8 +13,9 @@ const TABLE_HEADS = [
   "Surat",
 ];
 
-const AreaIzin = () => {
+const AreaIzin = ({ startDate, endDate }) => {
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   // Fetch data from API
   useEffect(() => {
@@ -30,6 +31,16 @@ const AreaIzin = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const filtered = tableData.filter((dataIzin) => {
+        const absensiDate = new Date(dataIzin.tanggal);
+        return absensiDate >= startDate && absensiDate <= endDate;
+      });
+      setFilteredData(filtered);
+    }
+  }, [startDate, endDate, tableData]);
 
   const handleAlasan = async (dataIzin) => {
     Swal.fire({
@@ -62,7 +73,7 @@ const AreaIzin = () => {
             </tr>
           </thead>
           <tbody>
-            {tableData?.map((dataIzin, index) => (
+            {filteredData.map((dataIzin, index) => (
               <tr key={dataIzin.id}>
                 <td>{index + 1}</td> {/* Auto-increment No */}
                 <td>{dataIzin.nik}</td>

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { AreaUserRegistrasi } from "../../components";
+import { AreaUserEdit } from "../../components";
 
 const UserEdit = () => {
-    const { userId } = localStorage.getItem(id);
+     const { userId } = useParams();
 
     return (
         <div className="content-area">
-            <AreaUserRegistrasi isEditMode={true} usersID={userId} />
+            <AreaUserEdit isEditMode={true} usersID={userId} />
         </div>
     );
 };

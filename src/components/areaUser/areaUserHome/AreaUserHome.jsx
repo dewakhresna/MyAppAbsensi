@@ -77,7 +77,7 @@ const AreaUserHome = () => {
       <div className="user-home-container">
         <div className="user-home-header">
           <h1>Nama Karyawan</h1> {/* ganti pake nama user nya h1 */}
-          <Link to={`/admin/karyawan/edit/${id}`} className="menu-link-edit">
+          <Link to={`/home/edit/${id}`} className="menu-link-edit">
             <span className="menu-link-icon-edit">
               <MdOutlinePermIdentity size={18} />
             </span>

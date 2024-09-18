@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./AreaUserIzin.scss";
+import Swal from "sweetalert2";
 
 const AreaUserIzin = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -39,13 +40,37 @@ const AreaUserIzin = () => {
   
       const result = await response.json();
       if (result.success) {
-        alert("Data successfully inserted");
+        const message = selectedOption === "Sakit"
+        ? "Izin Sakit"
+        : "Izin";
+
+        Swal.fire({
+          title: `Berhasil Mengirim ${message}`,
+          text: `${message} Anda telah terkirim.`,
+          icon: "success",
+          confirmButtonText: "Oke",
+        }).then(() => {
+          window.location.href = "/home";
+        }); 
+        // alert("Data successfully inserted");
       } else {
-        alert("Error submitting data");
+        Swal.fire({
+          title: `Gagal Mengirim ${message}`,
+          text: `Terjadi kesalahan mengirim ${message}`,
+          icon: "error",
+          confirmButtonText: "Kembali", 
+        });
+        // alert("Error submitting data");
       }
     } catch (error) {
-      console.error("Error:", error);
-      alert(`Error submitting data: ${error.message}`);
+      Swal.fire({
+        title: `Gagal Mengirim ${message}`,
+        text: `Terjadi kesalahan: ${error.message}`,
+        icon: "error",
+        confirmButtonText: "Kembali", 
+      });
+      // console.error("Error:", error);
+      // alert(`Error submitting data: ${error.message}`);
     }
   };
   

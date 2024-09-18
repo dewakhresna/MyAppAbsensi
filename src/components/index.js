@@ -10,5 +10,6 @@ export { default as AreaWebcam } from "./areaUser/areaWebcam/AreaWebcam";
 export { default as AreaUserRegistrasi } from "./areaUser/areaRegistrasi/AreaUserRegistrasi";
 export { default as AreaUserLogin } from "./areaUser/areaUserLogin/AreaUserLogin";
 export { default as AreaUserHome } from "./areaUser/areaUserHome/AreaUserHome";
+export { default as AreaUserEdit } from "./areaUser/areaUserEdit/AreaUserEdit";
 export { default as AreaUserIzin } from "./areaUser/areaUserIzin/AreaUserIzin";
 export { default as AreaLoading } from "./areaLoading/AreaLoading";
