@@ -24,7 +24,11 @@ def verification():
     image = base64_to_image(image_base64)
 
     try:
-        result = verification_check(nik=no_induk, image_form=image)
+        result = verification_check(nik=no_induk,
+                                    image_form=image,
+                                    backends='yunet',
+                                    metrics='cosine',
+                                    models='SFace')
 
         if result is None:
             return jsonify({
