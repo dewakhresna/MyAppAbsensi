@@ -204,7 +204,9 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                 </div>
                 
               )}
-          </div>
+              </div>
+            </>
+            )}
             <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
@@ -215,11 +217,19 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   required
                 />
               </div>
-            </>
-            )}
+              <div className="input-group">
+                <label htmlFor="confirmpassword">Konfirmasi Password</label>
+                <input
+                  type="password"
+                  id="confirmpassword"
+                  value={confirmpassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
           {!isEditMode && (
             <>
-            <div className="input-group">
+          <div className="input-group">
             <label htmlFor="gambarRegis">Foto Registrasi</label>
               <input
                 type="file"
