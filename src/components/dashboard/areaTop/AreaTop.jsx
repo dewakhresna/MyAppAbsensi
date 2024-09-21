@@ -7,7 +7,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 
-const AreaTop = ({ onDateRangeChange }) => {
+const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
   const { openSidebar } = useContext(SidebarContext);
 
   const [state, setState] = useState([
@@ -59,21 +59,25 @@ const AreaTop = ({ onDateRangeChange }) => {
         </button>
         <h2 className="area-top-title">Dashboard</h2>
       </div>
-      <div className="area-top-r">
-        <div
-          ref={dateRangeRef}
-          className={`date-range-wrapper ${!showDatePicker ? "hide-date-range" : ""}`}
-          onClick={handleInputClick}
-        >
-          <DateRange
-            editableDateInputs={true}
-            onChange={handleDateChange}
-            moveRangeOnFirstSelection={false}
-            ranges={state}
-            showMonthAndYearPickers={false}
-          />
+      {isDateMode && (
+        <div className="area-top-r">
+          <div
+            ref={dateRangeRef}
+            className={`date-range-wrapper ${
+              !showDatePicker ? "hide-date-range" : ""
+            }`}
+            onClick={handleInputClick}
+          >
+            <DateRange
+              editableDateInputs={true}
+              onChange={handleDateChange}
+              moveRangeOnFirstSelection={false}
+              ranges={state}
+              showMonthAndYearPickers={false}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

@@ -8,7 +8,7 @@ import AreaLoading from "../../areaLoading/AreaLoading";
 const OFFICE_LATITUDE = -6.18223503101325;
 const OFFICE_LONGITUDE = 107.03520440413142;
 
-const MAX_DISTANCE_METERS = 10;
+const MAX_DISTANCE_METERS = 1000000000;
 
 const handleCheck = async ( masuk = false ) => {
   const nama = localStorage.getItem("nama");
@@ -234,7 +234,7 @@ const AreaWebcam = ({  masuk = false }) => {
             title: "Success!",
             text: "Wajah Terverifikasi.",
             icon: "success",
-            confirmButtonText: "Absen",
+            confirmButtonText: masuk ? "Check-in" : "Check-out",
             preConfirm: async () => {
               await handleCheck(masuk); // Call HandlePost
             },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AreaUserEdit.scss"; // Custom styles for the registration page
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const AreaUserEdit = ({ isEditMode = false }) => {
@@ -13,7 +13,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [confirmpassword, setConfirmPassword] = useState("");
-  const [currentGambar, setCurrentGambar] = useState("")
+  const [currentGambar, setCurrentGambar] = useState("");
 
   const { id } = useParams();
 
@@ -21,9 +21,11 @@ const AreaUserEdit = ({ isEditMode = false }) => {
     if (isEditMode && id) {
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/api/readKaryawan/${id}`);
+          const response = await fetch(
+            `http://localhost:3001/api/readKaryawan/${id}`
+          );
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           const data = await response.json();
           const employee = data[0];
@@ -36,7 +38,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
           setConfirmPassword(employee.password);
           setCurrentGambar(employee.gambar); // Menyimpan nama gambar yang ada di server
         } catch (error) {
-          setError('Failed to fetch data.');
+          setError("Failed to fetch data.");
         }
       };
       fetchData();
@@ -47,25 +49,35 @@ const AreaUserEdit = ({ isEditMode = false }) => {
     setGambar(e.target.files[0]);
   };
 
+  const handleImageChange = async (currentGambar) => {
+    Swal.fire({
+      title: "Foto Sekarang",
+      imageUrl: `../../../../backend/uploads/${currentGambar}`,
+      imageHeight: 300,
+      imageWidth: 300,
+      imageAlt: "Tidak Ada Foto",
+    });
+  };
+
   const handleRegistrasi = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
-  
-    formData.append('nik', nomorInduk);
-    formData.append('email', email);
-    formData.append('nama', nama);
-    formData.append('kelamin', jenisKelamin);
-    formData.append('hp', noTelepon);
-    formData.append('password', password);
+
+    formData.append("nik", nomorInduk);
+    formData.append("email", email);
+    formData.append("nama", nama);
+    formData.append("kelamin", jenisKelamin);
+    formData.append("hp", noTelepon);
+    formData.append("password", password);
 
     if (gambar) {
-      formData.append('gambar', gambar);
+      formData.append("gambar", gambar);
     } else if (isEditMode && currentGambar) {
       // Tambahkan nama gambar yang sudah ada di server jika tidak memilih gambar baru
-      formData.append('existingGambar', currentGambar);
+      formData.append("existingGambar", currentGambar);
     }
-  
+
     // Validasi data
     const isNumeric = (str) => /^\d+$/.test(str);
     if (!isNumeric(nomorInduk)) {
@@ -80,28 +92,34 @@ const AreaUserEdit = ({ isEditMode = false }) => {
       setError("Konfirmasi password tidak sesuai.");
       return;
     }
-  
+
     try {
       const response = await fetch(
-        isEditMode ? `http://localhost:3001/api/update/${id}` : "http://localhost:3001/api/register",
+        isEditMode
+          ? `http://localhost:3001/api/update/${id}`
+          : "http://localhost:3001/api/register",
         {
           method: isEditMode ? "PUT" : "POST",
           body: formData,
         }
       );
-  
+
       const data = await response.json();
-      console.log('Response status:', response.status);
-      console.log('Response body:', data);
-  
+      console.log("Response status:", response.status);
+      console.log("Response body:", data);
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
-  
+
       if (data.success) {
         Swal.fire({
-          title: isEditMode ? "Berhasil Mengubah Data" : "Registrasi user berhasil.",
-          text: isEditMode ? "Data Anda telah diubah." : "Data Anda telah terdaftar.",
+          title: isEditMode
+            ? "Berhasil Mengubah Data"
+            : "Registrasi user berhasil.",
+          text: isEditMode
+            ? "Data Anda telah diubah."
+            : "Data Anda telah terdaftar.",
           icon: "success",
           confirmButtonText: "Oke",
         }).then(() => {
@@ -109,10 +127,12 @@ const AreaUserEdit = ({ isEditMode = false }) => {
         });
       } else {
         Swal.fire({
-          title: isEditMode ? "Gagal melakukan update." : "Gagal melakukan registrasi.",
+          title: isEditMode
+            ? "Gagal melakukan update."
+            : "Gagal melakukan registrasi.",
           text: `Terjadi kesalahan: ${error.message}`,
           icon: "error",
-          confirmButtonText: "Kembali", 
+          confirmButtonText: "Kembali",
         });
       }
     } catch (error) {
@@ -124,8 +144,6 @@ const AreaUserEdit = ({ isEditMode = false }) => {
       });
     }
   };
-  
-  
 
   return (
     <div className="user-registrasi-container">
@@ -188,24 +206,24 @@ const AreaUserEdit = ({ isEditMode = false }) => {
           {isEditMode && (
             <>
               <div className="input-group">
-                <label htmlFor="gambarRegis">Foto Registrasi</label>
-                  <input
-                    type="file"
-                    id="gambarRegis"
-                    onChange={handleFileChange}
-                  />
-               {currentGambar && (
-                <div>
-                  <img
-                    src={`../../../../backend/uploads/${currentGambar}`} // Sesuaikan URL sesuai path server Anda
-                    alt="Gambar yang diunggah"
-                    style={{ width: '100px', height: '100px' }} // Anda bisa mengatur ukuran gambar
-                  />
-                </div>
-                
-              )}
-          </div>
-            <div className="input-group">
+                <label htmlFor="gambarRegis">Foto</label>
+                <input
+                  type="file"
+                  id="gambarRegis"
+                  onChange={handleFileChange}
+                />
+              </div>
+
+              <div className="input-group">
+                <label
+                  htmlFor="gambarRegisLama"
+                  onClick={() => handleImageChange(currentGambar)}
+                >
+                  Lihat Foto Sekarang
+                </label>
+              </div>
+
+              <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
                   type="text"
@@ -216,19 +234,19 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                 />
               </div>
             </>
-            )}
+          )}
           {!isEditMode && (
             <>
-            <div className="input-group">
-            <label htmlFor="gambarRegis">Foto Registrasi</label>
-              <input
-                type="file"
-                id="gambarRegis"
-                onChange={handleFileChange}
-                required
-              />
-          </div>
-            <div className="input-group">
+              <div className="input-group">
+                <label htmlFor="gambarRegis">Foto Registrasi</label>
+                <input
+                  type="file"
+                  id="gambarRegis"
+                  onChange={handleFileChange}
+                  required
+                />
+              </div>
+              <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"
