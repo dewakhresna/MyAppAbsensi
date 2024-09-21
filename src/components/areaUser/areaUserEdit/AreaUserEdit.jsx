@@ -223,7 +223,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                 </label>
               </div>
 
-              <div className="input-group">
+            <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
                   type="text"
@@ -246,7 +246,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   required
                 />
               </div>
-              <div className="input-group">
+            <div className="input-group">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"
