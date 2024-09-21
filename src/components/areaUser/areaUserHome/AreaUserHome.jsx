@@ -69,6 +69,7 @@ const AreaUserHome = () => {
     localStorage.removeItem("nama");
     localStorage.removeItem("nik");
     localStorage.removeItem("id");
+    localStorage.removeItem("tanggal");
   };
 
   const id = localStorage.getItem("id");
