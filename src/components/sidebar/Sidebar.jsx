@@ -5,15 +5,10 @@ import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
 import {
   MdCoPresent,
-  MdOutlineBarChart,
   MdOutlineClose,
   MdEditDocument,
-  MdOutlineGridView,
   MdOutlineLogout,
-  MdOutlineMessage,
   MdOutlinePeople,
-  MdOutlineSettings,
-  MdOutlineShoppingBag,
 } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
