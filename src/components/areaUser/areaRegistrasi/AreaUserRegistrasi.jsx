@@ -116,12 +116,12 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
         Swal.fire({
           title: isEditMode
             ? "Berhasil Mengubah Data"
-            : "Registrasi user berhasil.",
+            : "Registrasi karyawan berhasil.",
           text: isEditMode
             ? "Data Anda telah diubah."
             : "Data Anda telah terdaftar.",
           icon: "success",
-          confirmButtonText: "Oke",
+          confirmButtonText: "Ok",
         }).then(() => {
           window.location.href = isEditMode ? "/admin/karyawan" : "/login";
         });
@@ -148,7 +148,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
   return (
     <div className="user-registrasi-container">
       <div className="registrasi-box">
-        <h2>{isEditMode ? "Edit User" : "Registrasi User"}</h2>
+        <h2>{isEditMode ? "Edit Karyawan" : "Registrasi Karyawan"}</h2>
         <form onSubmit={handleRegistrasi}>
           <div className="input-group">
             <label htmlFor="nomorInduk">Nomor Induk Karyawan</label>

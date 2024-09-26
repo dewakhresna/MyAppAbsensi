@@ -2,7 +2,7 @@
 const PageNotFound = () => {
   return (
     <div>
-      Page Not Found
+      Halaman tidak ditemukan
     </div>
   )
 }

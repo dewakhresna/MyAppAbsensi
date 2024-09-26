@@ -16,7 +16,21 @@ import ProtectEdit from "./components/areaUser/areaUserLogin/ProtectEdit";
 import ProtectCheckOut from "./components/areaUser/areaUserLogin/ProtectCheckOut";
 
 import UserCheckOut from "./screens/user/UserCheckOut";
-import { Dashboard, PageNotFound, Izin, Karyawan, KaryawanEdit, AdminLogin, UserHome, UserEdit, UserIzin, UserLoading, UserAbsen, UserRegistrasi, UserLogin } from "./screens/";
+import {
+  Dashboard,
+  PageNotFound,
+  Izin,
+  Karyawan,
+  KaryawanEdit,
+  AdminLogin,
+  UserHome,
+  UserEdit,
+  UserIzin,
+  UserLoading,
+  UserAbsen,
+  UserRegistrasi,
+  UserLogin,
+} from "./screens/";
 
 function App() {
   return (
@@ -24,95 +38,92 @@ function App() {
       <Router>
         <Routes>
           <Route element={<BaseLayout />}>
-          <Route
-            path="/admin"
+            <Route
+              path="/admin"
               element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
 
-        <Route
-            path="/admin/izin"
+            <Route
+              path="/admin/izin"
               element={
-              <ProtectedAdminIzin>
-                <Izin  />
-              </ProtectedAdminIzin>
-            }
-          />
+                <ProtectedAdminIzin>
+                  <Izin />
+                </ProtectedAdminIzin>
+              }
+            />
 
-        <Route
-            path="/admin/karyawan"
+            <Route
+              path="/admin/karyawan"
               element={
-              <ProtectedAdminKaryawan>
-                <Karyawan />
-              </ProtectedAdminKaryawan>
-            }
-          />
-
-        <Route
-            path="/admin/karyawan/edit/:id"
-              element={
-              <ProtectedAdminEdit>
-                <KaryawanEdit />
-              </ProtectedAdminEdit>
-            }
-          />
-            {/* <Route path="/admin/izin" element={<Izin />} />
-            <Route path="/admin/karyawan" element={<Karyawan />} /> */}
-            <Route path="*" element={<PageNotFound />} />
+                <ProtectedAdminKaryawan>
+                  <Karyawan />
+                </ProtectedAdminKaryawan>
+              }
+            />
+            {/* <Route path="*" element={<PageNotFound />} /> */}
           </Route>
           <Route element={<AdminLayout />}>
             <Route path="/loginadmin" element={<AdminLogin />} />
           </Route>
-            {/* <Route path="/admin/karyawan/edit/:id" element={<KaryawanEdit />} /> */}
-            <Route path="/registrasi" element={<UserRegistrasi />} />
-            <Route path="/login" element={<UserLogin />} />
-            <Route path="/" element={<UserLogin />} />
-            <Route
-            path="/home"
+          <Route
+              path="/admin/karyawan/edit/:id"
               element={
+                <ProtectedAdminEdit>
+                  <KaryawanEdit />
+                </ProtectedAdminEdit>
+              }
+            />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/registrasi" element={<UserRegistrasi />} />
+          <Route path="/login" element={<UserLogin />} />
+          <Route path="/" element={<UserLogin />} />
+          <Route
+            path="/home"
+            element={
               <ProtectKaryawan>
                 <UserHome />
               </ProtectKaryawan>
             }
           />
-        <Route
+          <Route
             path="/home/edit/:id"
-              element={
+            element={
               <ProtectEdit>
                 <UserEdit />
               </ProtectEdit>
             }
           />
-        <Route
+          <Route
             path="/home/izin"
-              element={
+            element={
               <ProtectIzin>
                 <UserIzin />
               </ProtectIzin>
             }
           />
-        <Route
+          <Route
             path="/home/absen"
-              element={
+            element={
               <ProtectAbsen>
                 <UserAbsen />
               </ProtectAbsen>
             }
           />
-        <Route
+          <Route
             path="/home/keluar"
-              element={
+            element={
               <ProtectCheckOut>
                 <UserCheckOut />
               </ProtectCheckOut>
             }
           />
-        <Route
+          <Route
             path="/home/loading"
-              element={
+            element={
               <ProtectLoading>
                 <UserLoading />
               </ProtectLoading>
