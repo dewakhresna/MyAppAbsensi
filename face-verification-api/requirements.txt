@@ -1,0 +1,8 @@
+Flask==3.0.3
+Flask_Cors==4.0.1
+opencv_python==4.10.0.84
+PyMySQL==1.1.1
+deepface==0.0.93
+python-dotenv==1.0.1
+pymysql
+# tf-keras (install manual)

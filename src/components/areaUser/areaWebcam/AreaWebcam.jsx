@@ -8,21 +8,19 @@ import AreaLoading from "../../areaLoading/AreaLoading";
 const OFFICE_LATITUDE = -6.18223503101325;
 const OFFICE_LONGITUDE = 107.03520440413142;
 
-const MAX_DISTANCE_METERS = 1000000000;
+const MAX_DISTANCE_METERS = 10;
 
-const handleCheck = async ( masuk = false ) => {
+const handleCheck = async (masuk = false) => {
   const nama = localStorage.getItem("nama");
   const nik = localStorage.getItem("nik");
   const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
 
-  const url = masuk 
-    ? "http://localhost:3001/api/karyawan_hadir" 
+  const url = masuk
+    ? "http://localhost:3001/api/karyawan_hadir"
     : `http://localhost:3001/api/karyawan_keluar/${nik}`;
-  
+
   const method = masuk ? "POST" : "PUT";
-  const body = masuk 
-    ? JSON.stringify({ nama, nik }) 
-    : JSON.stringify({ nik });
+  const body = masuk ? JSON.stringify({ nama, nik }) : JSON.stringify({ nik });
   try {
     const response = await fetch(url, {
       method,
@@ -39,15 +37,15 @@ const handleCheck = async ( masuk = false ) => {
         title: masuk ? "Check-in berhasil!" : "Check-out berhasil!",
         icon: "success",
         confirmButtonText: "Oke",
-      }).then(function() {
+      }).then(function () {
         window.location.href = "http://localhost:5173/home";
-      })
+      });
     } else {
       Swal.fire({
         title: masuk ? "Gagal check-in." : "Gagal check-out.",
         icon: "error",
         confirmButtonText: "Kembali",
-      })
+      });
     }
   } catch (error) {
     console.error("Error:", error);
@@ -76,7 +74,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = ({  masuk = false }) => {
+const AreaWebcam = ({ masuk = false }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -252,7 +250,7 @@ const AreaWebcam = ({  masuk = false }) => {
           title: "Error!",
           text: data.response,
           icon: "error",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       } else if (data.status === "error") {
         Swal.fire({
