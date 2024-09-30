@@ -8,7 +8,7 @@ import AreaLoading from "../../areaLoading/AreaLoading";
 const OFFICE_LATITUDE = -6.18223503101325;
 const OFFICE_LONGITUDE = 107.03520440413142;
 
-const MAX_DISTANCE_METERS = 10;
+const MAX_DISTANCE_METERS = 100000000;
 
 const handleCheck = async (masuk = false) => {
   const nama = localStorage.getItem("nama");
@@ -283,7 +283,7 @@ const AreaWebcam = ({ masuk = false }) => {
 
   return (
     <div className="area-webcam-container">
-      <h2>Absensi Kehadiran</h2>
+      <h2>{masuk ? "Absensi Kehadiran" : "Absensi Keluar"}</h2>
       <Webcam
         audio={false}
         screenshotFormat="image/jpeg"

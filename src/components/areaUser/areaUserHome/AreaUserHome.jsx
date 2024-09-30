@@ -77,7 +77,8 @@ const AreaUserHome = () => {
     <div className="area-user-home">
       <div className="user-home-container">
         <div className="user-home-header">
-          <h1>Nama Karyawan</h1> {/* ganti pake nama user nya h1 */}
+          <h1>Hallo {localStorage.getItem("nama")}</h1>
+          {/* <h1>Nama Karyawan</h1> ganti pake nama user nya h1 */}
           <Link to={`/home/edit/${id}`} className="menu-link-edit">
             <span className="menu-link-icon-edit">
               <MdOutlinePermIdentity size={18} />
