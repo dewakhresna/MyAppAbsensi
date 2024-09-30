@@ -78,7 +78,6 @@ const AreaUserHome = () => {
       <div className="user-home-container">
         <div className="user-home-header">
           <h1>Hallo {localStorage.getItem("nama")}</h1>
-          {/* <h1>Nama Karyawan</h1> ganti pake nama user nya h1 */}
           <Link to={`/home/edit/${id}`} className="menu-link-edit">
             <span className="menu-link-icon-edit">
               <MdOutlinePermIdentity size={18} />
@@ -91,19 +90,19 @@ const AreaUserHome = () => {
             <span className="menu-link-icon">
               <MdCoPresent size={18} />
             </span>
-            <span className="status-card-text">{`${jumlahhadir} Hadir`}</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahhadir} Hadir`}</span>
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdDeviceThermostat size={18} />
             </span>
-            <span className="status-card-text">{`${jumlahsakit} Sakit`}</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahsakit} Sakit`}</span>
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
               <MdEmail size={18} />
             </span>
-            <span className="status-card-text">{`${jumlahizin} Izin`}</span> {/* ganti sesuai user nya */}
+            <span className="status-card-text">{`${jumlahizin} Izin`}</span>
           </div>
         </div>
 
