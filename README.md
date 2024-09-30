@@ -32,18 +32,16 @@ Admin memiliki akses penuh untuk mengelola absensi, data karyawan, dan izin/saki
 
 ## Teknologi yang Digunakan
 ### Frontend
-- [Vite.js](https://vitejs.dev/) - Framework untuk membangun aplikasi web yang cepat dan efisien.
+- [React.js](https://react.dev/) dengan [Vite.js](https://vitejs.dev/) - Build tool untuk membangun aplikasi web yang cepat dan efisien.
 - [JavaScript](https://www.javascript.com/) - Bahasa pemrograman untuk interaksi di sisi pengguna.
+- [HTML5](https://developer.mozilla.org/en-US/docs/Web/HTML) - Struktur dasar aplikasi web.
+- [CSS dengan SCSS](https://sass-lang.com/ ) - Preprocessor CSS untuk Styling tampilan antarmuka.
 
 ### Backend
 - [Node.js](https://nodejs.org/) dengan [Express.js](https://expressjs.com/) - Backend server-side JavaScript untuk mengelola API absensi.
 - [MySQL](https://www.mysql.com/) - Sistem manajemen basis data relasional untuk menyimpan data pengguna dan absensi.
 - [Multer](https://github.com/expressjs/multer) - Middleware Node.js untuk mengelola upload file (gambar profil dan surat sakit).
 - [Flask](https://flask.palletsprojects.com/) dengan [DeepFace](https://github.com/serengil/deepface) - API Python untuk verifikasi wajah berbasis AI.
-
-### Lainnya
-- [HTML5](https://developer.mozilla.org/en-US/docs/Web/HTML) - Struktur dasar aplikasi web.
-- [CSS3](https://developer.mozilla.org/en-US/docs/Web/CSS) - Styling untuk tampilan antarmuka.
 
 ## Instalasi
 Pastikan sudah menginstal:
