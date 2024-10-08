@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-face-verification-api/env
-face-verification-api/.env
+*env
+*.env
+*__pycache__
