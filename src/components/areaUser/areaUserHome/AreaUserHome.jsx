@@ -32,26 +32,51 @@ const AreaUserHome = () => {
         const absensiResults = await absensiResponse.json();
         setAbsensiData(absensiResults);
 
-        const localStorageDate = localStorage.getItem('tanggal');
-        const formattedLocalStorageDate = extractDate(localStorageDate);
+        // const localStorageDate = localStorage.getItem('tanggal');
+        const localStorageNik = localStorage.getItem('nik');
+        // const formattedLocalStorageDate = extractDate(localStorageDate);
 
-        const formatted = absensiResults.map(item => ({
-          ...item,
-          formattedDate: extractDate(item.tanggal)
-        }));
-        setCount(formatted.filter(data => data.formattedDate === formattedLocalStorageDate).length);
+        // const formatted = absensiResults.map(item => ({
+        //   ...item,
+        //   formattedDate: extractDate(item.tanggal)
+        // }));
+        if (localStorageNik) {
+          // Filter data berdasarkan NIK yang ada di localStorage
+          const filteredData = absensiResults.filter(data => data.nik === localStorageNik);
+    
+          // Set count berdasarkan jumlah data yang cocok dengan NIK
+          setCount(filteredData.length);
+        }
 
         const sakitResponse = await fetch('http://localhost:3001/api/readsakit');
         const sakitResults = await sakitResponse.json();
         setSakitData(sakitResults);
 
-        const keterangan = sakitResults.map(item => ({
-          DataKeteranganFilter: item.keterangan,
-          formattedDateizin: extractDate(item.tanggal)
-        }));
+        // const keterangan = sakitResults.map(item => ({
+        //   DataKeteranganFilter: item.keterangan,
+        //   formattedDateizin: extractDate(item.tanggal)
+        // }));
         
-        setCountSakit(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Sakit").length);
-        setCountIzin(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Izin").length);
+        // setCountSakit(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Sakit").length);
+        // setCountIzin(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Izin").length);
+
+        if (localStorageNik) {
+          // Filter data sakit berdasarkan NIK dan keterangan "Sakit"
+          const filteredSakitData = sakitResults.filter(data =>
+            data.nik === localStorageNik &&
+            data.keterangan === "Sakit"
+          );
+          
+          // Filter data izin berdasarkan NIK dan keterangan "Izin"
+          const filteredIzinData = sakitResults.filter(data =>
+            data.nik === localStorageNik &&
+            data.keterangan === "Izin"
+          );
+    
+          // Set jumlah data yang sesuai dengan "Sakit" dan "Izin"
+          setCountSakit(filteredSakitData.length);
+          setCountIzin(filteredIzinData.length);
+        }
 
       } catch (error) {
         console.error('Error fetching data:', error);

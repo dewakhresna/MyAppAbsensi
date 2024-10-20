@@ -74,7 +74,6 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
       imageAlt: "Tidak Ada Surat Dokter",
     });
   };
-
   return (
     <section className="content-area-table">
       <div className="data-table-info">
