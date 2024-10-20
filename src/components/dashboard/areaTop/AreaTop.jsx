@@ -7,7 +7,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
 
-const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
+const AreaTop = ({ onDateRangeChange, onSearchChange, isDateMode = true }) => {
   const { openSidebar } = useContext(SidebarContext);
 
   const [state, setState] = useState([
@@ -19,6 +19,7 @@ const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
   ]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); 
   const dateRangeRef = useRef(null);
 
   const handleInputClick = () => {
@@ -38,12 +39,18 @@ const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
     };
   }, []);
 
-  // Hanya update ketika endDate dipilih
   const handleDateChange = (item) => {
     setState([item.selection]);
     if (item.selection.endDate) {
       onDateRangeChange(item.selection.startDate, item.selection.endDate);
-      setShowDatePicker(false); // Sembunyikan date picker setelah selesai memilih
+      setShowDatePicker(false);
+    }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    if (onSearchChange) {
+      onSearchChange(event.target.value); 
     }
   };
 
@@ -59,8 +66,10 @@ const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
         </button>
         <h2 className="area-top-title">Dashboard</h2>
       </div>
-      {isDateMode && (
-        <div className="area-top-r">
+
+      {/* Wrapper untuk filter tanggal dan search bar */}
+      <div className="area-top-r">
+        {isDateMode && (
           <div
             ref={dateRangeRef}
             className={`date-range-wrapper ${
@@ -76,8 +85,17 @@ const AreaTop = ({ onDateRangeChange, isDateMode = true }) => {
               showMonthAndYearPickers={false}
             />
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Search bar mengikuti lebar date-range-wrapper */}
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-bar"
+        />
+      </div>
     </section>
   );
 };

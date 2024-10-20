@@ -12,12 +12,12 @@ const TABLE_HEADS = [
   "Action",
 ];
 
-const AreaKaryawan = () => {
+const AreaKaryawan = ({ searchQuery }) => { 
   const [karyawanData, setKaryawanData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,6 +35,18 @@ const AreaKaryawan = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    let filtered = karyawanData;
+
+    if (searchQuery) {
+      filtered = filtered.filter((karyawan) =>
+        karyawan.nama.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered);
+  }, [searchQuery, karyawanData]);
 
   return (
     <section className="content-area-table">
@@ -56,7 +68,7 @@ const AreaKaryawan = () => {
               </tr>
             </thead>
             <tbody>
-              {karyawanData.map((dataKaryawan, index) => (
+              {filteredData.map((dataKaryawan, index) => (
                 <tr key={dataKaryawan.id}>
                   <td>{index + 1}</td>
                   <td>{dataKaryawan.nik}</td>
