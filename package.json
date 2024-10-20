@@ -23,7 +23,8 @@
     "react-webcam": "^7.2.0",
     "recharts": "^2.10.3",
     "sass": "^1.69.7",
-    "sweetalert2": "^11.13.1"
+    "sweetalert2": "^11.13.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
