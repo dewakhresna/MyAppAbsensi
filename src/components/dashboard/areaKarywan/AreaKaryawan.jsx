@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AreaKaryawanAction from "./AreaKaryawanAction";
 import "./AreaKaryawan.scss";
+import * as XLSX from "xlsx";
 
 const TABLE_HEADS = [
   "No",
@@ -48,10 +49,20 @@ const AreaKaryawan = ({ searchQuery }) => {
     setFilteredData(filtered);
   }, [searchQuery, karyawanData]);
 
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Kehadiran");
+    XLSX.writeFile(workbook, "data_karyawan.xlsx");
+  };
+
   return (
     <section className="content-area-table">
       <div className="data-table-info">
         <h4 className="data-table-title">Data Karyawan</h4>
+        <button onClick={exportToExcel} className="export-btn">
+          Export to Excel
+        </button>
       </div>
       <div className="data-table-diagram">
         {loading ? (

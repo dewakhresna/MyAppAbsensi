@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./AreaIzin.scss";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 
 const TABLE_HEADS = [
   "No",
@@ -50,6 +51,13 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
     setFilteredData(filtered); 
   }, [startDate, endDate, searchQuery, tableData]);
 
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Kehadiran");
+    XLSX.writeFile(workbook, "data_izin_sakit.xlsx");
+  };
+
   const handleAlasan = async (dataIzin) => {
     Swal.fire({
       title: "Alasan Izin / Sakit",
@@ -71,6 +79,9 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
     <section className="content-area-table">
       <div className="data-table-info">
         <h4 className="data-table-title">Izin / Sakit Karyawan</h4>
+        <button onClick={exportToExcel} className="export-btn">
+          Export to Excel
+        </button>
       </div>
       <div className="data-table-diagram">
         <table>
