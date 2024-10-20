@@ -1,11 +1,20 @@
-import { isDate } from "date-fns";
-import { AreaTop, AreaKaryawan} from "../../components";
+import { useState } from "react";
+import { AreaTop, AreaKaryawan } from "../../components";
 
 const Karyawan = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
+
   return (
     <div className="content-area">
-      <AreaTop isDateMode={false}/>
-      <AreaKaryawan />
+      <AreaTop 
+        isDateMode={false} 
+        onSearchChange={handleSearchChange} 
+      />
+      <AreaKaryawan searchQuery={searchQuery} />
     </div>
   );
 };

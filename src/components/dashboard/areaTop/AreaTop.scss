@@ -17,6 +17,14 @@
     column-gap: 6px;
   }
 
+  .area-top-r {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    gap: 10px;
+  }
+
   .sidebar-open-btn {
     display: inline-flex;
     align-items: center;
@@ -29,10 +37,36 @@
     }
   }
 
+  .search-bar {
+    width: 100%;
+    padding: 10px 15px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  
+    font-size: 16px;
+    color: #333;
+  
+    &:focus {
+      outline: none;
+      border-color: #3f51b5;
+      box-shadow: 0 4px 8px rgba(63, 81, 181, 0.2);
+    }
+  
+    &::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+  }
+
   // react-date-range plugin theme customization
   .date-range-wrapper {
-    display: inline-block;
-    box-shadow: var(--light-shadow1);
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 8px;
 
     .rdrDateDisplay {
       margin: 0;

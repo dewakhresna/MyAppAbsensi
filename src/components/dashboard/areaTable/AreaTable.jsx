@@ -11,7 +11,7 @@ const TABLE_HEADS = [
   "Keterangan",
 ];
 
-const AreaTable = ({ startDate, endDate }) => {
+const AreaTable = ({ startDate, endDate, searchQuery }) => {
   const [absensidata, setabsensidata] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -32,17 +32,23 @@ const AreaTable = ({ startDate, endDate }) => {
   }, []);
 
   useEffect(() => {
+    let filtered = absensidata;
+
     if (startDate && endDate) {
-      const filtered = absensidata.filter((absendata) => {
+      filtered = filtered.filter((absendata) => {
         const absensiDate = new Date(absendata.tanggal);
-        console.log(absensiDate)
         return absensiDate >= startDate && absensiDate <= endDate;
       });
-      setFilteredData(filtered);
-      
     }
-  }, [startDate, endDate, absensidata]);
-  
+
+    if (searchQuery) {
+      filtered = filtered.filter((absendata) =>
+        absendata.nama.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered);
+  }, [startDate, endDate, searchQuery, absensidata]);
 
   return (
     <section className="content-area-table">

@@ -13,17 +13,16 @@ const TABLE_HEADS = [
   "Surat",
 ];
 
-const AreaIzin = ({ startDate, endDate }) => {
+const AreaIzin = ({ startDate, endDate, searchQuery }) => {
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/readsakit");
         const data = await response.json();
-        setTableData(data); // Save the fetched data to state
+        setTableData(data); 
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -33,14 +32,23 @@ const AreaIzin = ({ startDate, endDate }) => {
   }, []);
 
   useEffect(() => {
+    let filtered = tableData;
+
     if (startDate && endDate) {
-      const filtered = tableData.filter((dataIzin) => {
+      filtered = filtered.filter((dataIzin) => {
         const absensiDate = new Date(dataIzin.tanggal);
         return absensiDate >= startDate && absensiDate <= endDate;
       });
-      setFilteredData(filtered);
     }
-  }, [startDate, endDate, tableData]);
+
+    if (searchQuery) {
+      filtered = filtered.filter((dataIzin) =>
+        dataIzin.nama.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered); 
+  }, [startDate, endDate, searchQuery, tableData]);
 
   const handleAlasan = async (dataIzin) => {
     Swal.fire({
@@ -58,6 +66,7 @@ const AreaIzin = ({ startDate, endDate }) => {
       imageAlt: "Tidak Ada Surat Dokter",
     });
   };
+
   return (
     <section className="content-area-table">
       <div className="data-table-info">
@@ -67,7 +76,7 @@ const AreaIzin = ({ startDate, endDate }) => {
         <table>
           <thead>
             <tr>
-              {TABLE_HEADS?.map((th, index) => (
+              {TABLE_HEADS.map((th, index) => (
                 <th key={index}>{th}</th>
               ))}
             </tr>
