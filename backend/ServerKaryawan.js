@@ -48,6 +48,80 @@ db.connect((err) => {
   console.log("Connected to MySQL");
 });
 
+
+//insert izin approve
+app.post('/api/approve2', (req, res) => {
+  console.log("Request body:", req.body); // Log the incoming request body
+  const { nik, nama, tanggal, tanggal_pengajuan, alasan } = req.body;
+
+  const sql = "INSERT INTO approve2 (nik, nama, tanggal, tanggal_pengajuan, alasan) VALUES (?, ?, ?, ?, ?)";
+  db.query(sql, [nik, nama, tanggal, tanggal_pengajuan, alasan], (err, result) => {
+    if (err) {
+      console.error('Error inserting data:', err);
+      return res.status(500).send(err);
+    }
+    res.json({ success: true, message: 'Data successfully inserted' });
+  });
+});
+
+app.post('/api/acceptapprove', (req, res) => {
+  console.log("Request body:", req.body); // Log the incoming request body
+  const { nik, nama, tanggal, alasan } = req.body;
+
+  const sql = `INSERT INTO dashbord_sakit (nik, nama, tanggal, keterangan, alasan) VALUES (?, ?, ?, "Izin", ?)`;
+  db.query(sql, [nik, nama, tanggal, alasan], (err, result) => {
+    if (err) {
+      console.error('Error inserting data:', err);
+      return res.status(500).send(err);
+    }
+    res.json({ success: true, message: 'Data successfully inserted' });
+  });
+});
+
+//read izin approve
+app.get('/api/readapprove', (req, res) => {
+  const sql = 'SELECT * FROM approve2';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return res.status(500).send(err);
+    }
+    res.json(results);
+  });
+});
+
+
+//delete approve
+app.delete('/api/approve/:id', (req, res) => {
+  const { id } = req.params;
+
+  const sql = 'DELETE FROM approve2 WHERE id = ?';
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error deleting data:', err);
+      return res.status(500).send(err);
+    }
+    res.json({ success: true, message: 'Data successfully deleted' });
+  });
+});
+
+
+
+app.post('/api/approve', (req, res) => {
+  const { izin, tanggal } = req.body;
+  
+  console.log(`Menerima izin: ${izin}, tanggal: ${tanggal}`); // Menampilkan tanggal yang diterima
+
+  const sql = 'INSERT INTO coba (izin, tanggal) VALUES (?, ?)';
+  db.query(sql, [izin, tanggal], (err, result) => {
+    if (err) {
+      console.error('Error inserting data:', err);
+      return res.status(500).send(err);
+    }
+    res.json({ success: true, message: 'Data successfully inserted' });
+  });
+});
+
 //insert
 app.post("/api/register", upload.single("gambar"), (req, res) => {
   // Ambil data dari body dan file
@@ -252,6 +326,9 @@ app.get("/api/readsakit", (req, res) => {
     res.json(results);
   });
 });
+
+
+
 
 // Menjalankan server
 app.listen(port, () => {

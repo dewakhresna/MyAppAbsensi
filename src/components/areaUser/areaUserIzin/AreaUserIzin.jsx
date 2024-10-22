@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./AreaUserIzin.scss";
 import Swal from "sweetalert2";
 
@@ -7,6 +7,89 @@ const AreaUserIzin = () => {
   const [alasan, setAlasan] = useState("");
   const [file, setFile] = useState(null);
   const [tanggal, setTanggal] = useState("");
+
+  useEffect(() => {
+    const nik = localStorage.getItem("nik");
+    const nama = localStorage.getItem("nama");
+    const tanggal = localStorage.getItem("tanggal");
+
+    console.log("Nik:", nik);
+    console.log("Nama:", nama);
+    console.log("Tanggal:", tanggal);
+}, []); // Memastikan ini dipanggil setelah komponen dirender
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Pastikan menggunakan tanggal dari input
+  const formattedDate = tanggal; // Menggunakan nilai dari state `tanggal`
+
+  try {
+    const response = await fetch("http://localhost:3001/api/approve", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ izin: alasan, tanggal: formattedDate }), // Mengirimkan tanggal
+    });
+    await response.json();
+    
+  } catch (error) {
+    console.error("Error inserting data:", error);
+  }
+};
+const handleIzin = async (e) => {
+  e.preventDefault();
+
+  
+  const nik = localStorage.getItem("nik");
+  const nama = localStorage.getItem("nama");
+  const tanggal2 = localStorage.getItem("tanggal");
+  const formattedDate = tanggal;
+
+  console.log("Data yang akan dikirim:", {
+      nik: localStorage.getItem("nik"),
+      nama: localStorage.getItem("nama"),
+      tanggal: localStorage.getItem("tanggal"),
+      tanggal_pengajuan: formattedDate,
+      alasan: alasan
+  });
+
+  try {
+      const response = await fetch("http://localhost:3001/api/approve2", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nik: nik, nama: nama, tanggal: tanggal2, tanggal_pengajuan: formattedDate, alasan: alasan }), // Mengirimkan tanggal
+      });
+
+      const result = await response.json();
+      if (result.success) {
+          Swal.fire({
+              title: 'Berhasil Mengirim Izin',
+              text: 'Izin Anda telah terkirim.',
+              icon: "success",
+              confirmButtonText: "Oke",
+          }).then(() => {
+              window.location.href = "/home";
+          });
+      } else {
+          Swal.fire({
+              title: 'Gagal Mengirim Izin',
+              text: result.message || 'Terjadi kesalahan.',
+              icon: "error",
+              confirmButtonText: "Kembali",
+          });
+      }
+  } catch (error) {
+      console.error("Error inserting data:", error);
+      Swal.fire({
+          title: 'Gagal Mengirim Izin',
+          text: `Terjadi kesalahan: ${error.message}`,
+          icon: "error",
+          confirmButtonText: "Kembali",
+      });
+  }
+};
+
+
 
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
@@ -28,14 +111,14 @@ const AreaUserIzin = () => {
     formData.append("nama", localStorage.getItem("nama"));
     formData.append("alasan", alasan);
     formData.append("keterangan", selectedOption);
-    formData.append("tanggal", tanggal); // ubah aja kalau nggak sesuai
+    formData.append("tanggal", localStorage.getItem("tanggal")); // ubah aja kalau nggak sesuai
     if (file) {
       formData.append("surat", file);
     }
 
     try {
       const response = await fetch("http://localhost:3001/api/sakit", {
-        method: "POST",
+      method: "POST",
         body: formData,
       });
 
@@ -78,61 +161,83 @@ const AreaUserIzin = () => {
     }
   };
 
+  
+
+
   return (
     <div className="user-izin-container">
       <div className="izin-box">
         <h2>Pengajuan Izin</h2>
-        <form onSubmit={handleFormSubmit}>
-          <div className="input-group">
-            <label htmlFor="keterangan">Keterangan</label>
-            <select
-              id="keterangan"
-              value={selectedOption}
-              onChange={handleSelectChange}
-            >
-              <option value="">Pilih</option>
-              <option value="Sakit">Sakit</option>
-              <option value="Izin">Izin</option>
-            </select>
-          </div>
-          {selectedOption === "Sakit" && (
+        {/* Dropdown untuk memilih antara "Sakit" dan "Izin" */}
+        <div className="input-group">
+          <label htmlFor="keterangan">Keterangan</label>
+          <select
+            id="keterangan"
+            value={selectedOption}
+            onChange={handleSelectChange}
+          >
+            <option value="">Pilih</option>
+            <option value="Sakit">Sakit</option>
+            <option value="Izin">Izin</option>
+          </select>
+        </div>
+  
+        {/* Form untuk Sakit */}
+        {selectedOption === "Sakit" && (
+          <form onSubmit={handleFormSubmit}>
             <div className="input-group">
               <label htmlFor="surat">Surat Dokter</label>
               <input type="file" id="surat" onChange={handleFileChange} />
             </div>
-          )}
-
-          {selectedOption === "Izin" && (
+  
+            <div className="input-group">
+              <label htmlFor="alasan">Alasan</label>
+              <textarea
+                id="alasan"
+                placeholder="Masukkan Alasan Sakit"
+                value={alasan}
+                onChange={(e) => setAlasan(e.target.value)}
+              ></textarea>
+            </div>
+  
+            <button type="submit" className="izin-button">
+              Kirim Izin Sakit
+            </button>
+          </form>
+        )}
+  
+        {/* Form untuk Izin */}
+        {selectedOption === "Izin" && (
+          <form onSubmit={handleIzin}>
             <div className="input-group">
               <label htmlFor="tanggal">Tanggal</label>
               <input
                 type="date"
                 id="tanggal"
                 value={tanggal}
-                // onChange={handleDateChange}
+                onChange={handleDateChange}
               />
             </div>
-          )}
-
-          <div className="input-group">
-            <label htmlFor="alasan">Alasan</label>
-            <textarea
-              id="alasan"
-              placeholder="Masukkan Alasan Izin atau Sakit"
-              value={alasan}
-              onChange={(e) => setAlasan(e.target.value)}
-            ></textarea>
-          </div>
-
-          {selectedOption !== "" && (
+  
+            <div className="input-group">
+              <label htmlFor="alasan">Alasan</label>
+              <textarea
+                id="alasan"
+                placeholder="Masukkan Alasan Izin"
+                value={alasan}
+                onChange={(e) => setAlasan(e.target.value)}
+              ></textarea>
+            </div>
+  
             <button type="submit" className="izin-button">
               Kirim Izin
             </button>
-          )}
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );
+  
 };
 
 export default AreaUserIzin;

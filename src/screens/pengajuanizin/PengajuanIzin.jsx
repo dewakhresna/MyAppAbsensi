@@ -18,10 +18,6 @@ const Izin = () => {
 
   return (
     <div className="content-area">
-      <AreaTop
-        onDateRangeChange={handleDateRangeChange}
-        onSearchChange={handleSearchChange}
-      />
       <AreaIzin
         startDate={dateRange.startDate}
         endDate={dateRange.endDate}
