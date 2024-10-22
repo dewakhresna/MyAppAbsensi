@@ -93,7 +93,7 @@ const AreaTop = ({ onDateRangeChange, onSearchChange, isDateMode = true }) => {
           placeholder="Search by name..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="search-bar"
+          className={`search-bar ${!isDateMode ? "search-bar-small" : ""}`}
         />
       </div>
     </section>

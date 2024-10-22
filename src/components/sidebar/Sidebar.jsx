@@ -9,6 +9,7 @@ import {
   MdEditDocument,
   MdOutlineLogout,
   MdOutlinePeople,
+  MdAssignmentAdd,
 } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
@@ -98,18 +99,18 @@ const Sidebar = () => {
                 <span className="menu-link-text">Izin / Sakit</span>
               </Link>
             </li>
-            {/* <li className="menu-item">
+            <li className="menu-item">
               <Link
-                to="/"
-                className={`menu-link ${activeItem === "/chartabsensi" ? "active" : ""}`}
-                onClick={() => setActiveItem("/chartabsensi")}
+                to="/admin/pengajuanizin"
+                className={`menu-link ${activeItem === "/admin/pengajuanizin" ? "active" : ""}`}
+                onClick={() => setActiveItem("/admin/pengajuanizin")}
               >
                 <span className="menu-link-icon">
-                  <MdOutlineBarChart size={20} />
+                  <MdAssignmentAdd size={18} />
                 </span>
-                <span className="menu-link-text">Chart Absensi</span>
+                <span className="menu-link-text">Pengajuan Izin</span>
               </Link>
-            </li> */}
+            </li>
             <li className="menu-item">
               <Link
                 to="/admin/karyawan"

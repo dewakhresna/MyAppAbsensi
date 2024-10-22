@@ -4,26 +4,75 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 
-const TABLE_HEADS = [
-  "No",
-  "No Induk",
-  "Nama",
-  "Tanggal Izin",
-  "Keterangan",
-  "Alasan",
-  "Surat",
-];
+// const TABLE_HEADS = [
+//   "No",
+//   "No Induk",
+//   "Nama",
+//   "Tanggal Izin",
+//   "Keterangan",
+//   "Alasan",
+//   "Surat",
+//   "Action",
+// ];
 
-const AreaIzin = ({ startDate, endDate, searchQuery }) => {
+// if (isPengajuanMode) {
+//   const TABLE_HEADS = [
+//     "No",
+//     "No Induk",
+//     "Nama",
+//     "Tanggal Izin",
+//     "Keterangan",
+//     "Alasan",
+//     "Surat",
+//     "Action",
+//   ];
+// } else {
+//   const TABLE_HEADS = [
+//     "No",
+//     "No Induk",
+//     "Nama",
+//     "Tanggal Izin",
+//     "Keterangan",
+//     "Alasan",
+//     "Surat",
+//   ];
+// }
+
+const AreaIzin = ({
+  startDate,
+  endDate,
+  searchQuery,
+  isPengajuanMode = false,
+}) => {
   const [tableData, setTableData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+
+  const TABLE_HEADS = isPengajuanMode
+    ? [
+        "No",
+        "No Induk",
+        "Nama",
+        "Tanggal Izin",
+        "Keterangan",
+        "Alasan",
+        "Action",
+      ]
+    : [
+        "No",
+        "No Induk",
+        "Nama",
+        "Tanggal Izin",
+        "Keterangan",
+        "Alasan",
+        "Surat",
+      ];
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/readsakit");
         const data = await response.json();
-        setTableData(data); 
+        setTableData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,7 +97,7 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
       );
     }
 
-    setFilteredData(filtered); 
+    setFilteredData(filtered);
   }, [startDate, endDate, searchQuery, tableData]);
 
   const exportToExcel = () => {
@@ -56,13 +105,6 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Kehadiran");
     XLSX.writeFile(workbook, "data_izin_sakit.xlsx");
-  };
-
-  const handleAlasan = async (dataIzin) => {
-    Swal.fire({
-      title: "Alasan Izin / Sakit",
-      text: dataIzin.alasan,
-    });
   };
 
   const handleSurat = async (dataIzin) => {
@@ -78,9 +120,11 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
     <section className="content-area-table">
       <div className="data-table-info">
         <h4 className="data-table-title">Izin / Sakit Karyawan</h4>
-        <button onClick={exportToExcel} className="export-btn">
-          Export to Excel
-        </button>
+        {!isPengajuanMode && (
+          <button onClick={exportToExcel} className="export-btn">
+            Export to Excel
+          </button>
+        )}
       </div>
       <div className="data-table-diagram">
         <table>
@@ -99,20 +143,27 @@ const AreaIzin = ({ startDate, endDate, searchQuery }) => {
                 <td>{dataIzin.nama}</td>
                 <td>{new Date(dataIzin.tanggal).toLocaleDateString()}</td>
                 <td>{dataIzin.keterangan}</td>
-                <td>
-                  <Link onClick={() => handleAlasan(dataIzin)} className="dropdown-menu-link">
-                    Lihat
-                  </Link>
-                </td>
-                <td>
-                  {dataIzin.keterangan === "Izin" ? (
-                    "-"
-                  ) : (
-                    <Link onClick={() => handleSurat(dataIzin)} className="dropdown-menu-link">
-                      Lihat
-                    </Link>
-                  )}
-                </td>
+                <td>{dataIzin.alasan}</td>
+                {!isPengajuanMode && (
+                  <td>
+                    {dataIzin.keterangan === "Izin" ? (
+                      "-"
+                    ) : (
+                      <Link
+                        onClick={() => handleSurat(dataIzin)}
+                        className="dropdown-menu-link"
+                      >
+                        Lihat
+                      </Link>
+                    )}
+                  </td>
+                )}
+                {isPengajuanMode && (
+                  <td className="action-buttons">
+                    <button className="btn-approve">Izinkan</button>
+                    <button className="btn-reject">Tolak</button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

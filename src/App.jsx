@@ -20,6 +20,7 @@ import {
   Dashboard,
   PageNotFound,
   Izin,
+  PengajuanIzin,
   Karyawan,
   KaryawanEdit,
   AdminLogin,
@@ -52,6 +53,15 @@ function App() {
               element={
                 <ProtectedAdminIzin>
                   <Izin />
+                </ProtectedAdminIzin>
+              }
+            />
+
+            <Route
+              path="/admin/pengajuanizin"
+              element={
+                <ProtectedAdminIzin>
+                  <PengajuanIzin />
                 </ProtectedAdminIzin>
               }
             />

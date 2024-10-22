@@ -6,6 +6,7 @@ const AreaUserIzin = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [alasan, setAlasan] = useState("");
   const [file, setFile] = useState(null);
+  const [tanggal, setTanggal] = useState("");
 
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
@@ -15,34 +16,37 @@ const AreaUserIzin = () => {
     setFile(e.target.files[0]);
   };
 
+  const handleDateChange = (e) => {
+    setTanggal(e.target.value); // ubah aja kalau nggak sesuai
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
-    formData.append("nik", localStorage.getItem("nik")); 
+    formData.append("nik", localStorage.getItem("nik"));
     formData.append("nama", localStorage.getItem("nama"));
     formData.append("alasan", alasan);
     formData.append("keterangan", selectedOption);
+    formData.append("tanggal", tanggal); // ubah aja kalau nggak sesuai
     if (file) {
       formData.append("surat", file);
     }
-  
+
     try {
       const response = await fetch("http://localhost:3001/api/sakit", {
         method: "POST",
         body: formData,
       });
-  
+
       // Check if response is okay
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
-  
+
       const result = await response.json();
       if (result.success) {
-        const message = selectedOption === "Sakit"
-        ? "Izin Sakit"
-        : "Izin";
+        const message = selectedOption === "Sakit" ? "Izin Sakit" : "Izin";
 
         Swal.fire({
           title: `Berhasil Mengirim ${message}`,
@@ -51,14 +55,14 @@ const AreaUserIzin = () => {
           confirmButtonText: "Oke",
         }).then(() => {
           window.location.href = "/home";
-        }); 
+        });
         // alert("Data successfully inserted");
       } else {
         Swal.fire({
           title: `Gagal Mengirim ${message}`,
           text: `Terjadi kesalahan mengirim ${message}`,
           icon: "error",
-          confirmButtonText: "Kembali", 
+          confirmButtonText: "Kembali",
         });
         // alert("Error submitting data");
       }
@@ -67,13 +71,12 @@ const AreaUserIzin = () => {
         title: `Gagal Mengirim ${message}`,
         text: `Terjadi kesalahan: ${error.message}`,
         icon: "error",
-        confirmButtonText: "Kembali", 
+        confirmButtonText: "Kembali",
       });
       // console.error("Error:", error);
       // alert(`Error submitting data: ${error.message}`);
     }
   };
-  
 
   return (
     <div className="user-izin-container">
@@ -95,10 +98,18 @@ const AreaUserIzin = () => {
           {selectedOption === "Sakit" && (
             <div className="input-group">
               <label htmlFor="surat">Surat Dokter</label>
+              <input type="file" id="surat" onChange={handleFileChange} />
+            </div>
+          )}
+
+          {selectedOption === "Izin" && (
+            <div className="input-group">
+              <label htmlFor="tanggal">Tanggal</label>
               <input
-                type="file"
-                id="surat"
-                onChange={handleFileChange}
+                type="date"
+                id="tanggal"
+                value={tanggal}
+                // onChange={handleDateChange}
               />
             </div>
           )}

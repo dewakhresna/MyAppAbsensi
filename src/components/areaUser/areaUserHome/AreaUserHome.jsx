@@ -8,6 +8,7 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdForwardToInbox,
   MdOutlineLogout,
+  MdAccessTime
 } from "react-icons/md";
 import "./AreaUserHome.scss";
 import React, { useState, useEffect } from 'react';
@@ -116,6 +117,12 @@ const AreaUserHome = () => {
               <MdCoPresent size={18} />
             </span>
             <span className="status-card-text">{`${jumlahhadir} Hadir`}</span>
+          </div>
+          <div className="status-card">
+            <span className="menu-link-icon">
+              <MdAccessTime size={18} />
+            </span>
+            <span className="status-card-text">{`${jumlahhadir} Lembur`}</span>
           </div>
           <div className="status-card">
             <span className="menu-link-icon">

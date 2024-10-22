@@ -26,7 +26,7 @@ const Izin = () => {
         startDate={dateRange.startDate}
         endDate={dateRange.endDate}
         searchQuery={searchQuery} // Teruskan searchQuery
-        isPengajuanMode={false}
+        isPengajuanMode={true}
       />
     </div>
   );
