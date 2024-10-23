@@ -72,7 +72,6 @@ const AreaUserLogin = () => {
             Login
           </button>
         </form>
-        <p className="text-bottom">Belum punya akun? <a href="/registrasi"> Daftar sekarang</a></p>
       </div>
     </div>
   );

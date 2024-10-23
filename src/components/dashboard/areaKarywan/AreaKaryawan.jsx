@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import AreaKaryawanAction from "./AreaKaryawanAction";
 import "./AreaKaryawan.scss";
 import * as XLSX from "xlsx";
 
-const TABLE_HEADS = [
-  "No",
-  "No Induk",
-  "Nama",
-  "Email",
-  "Jenis Kelamin",
-  "No Telepon",
-  "Action",
-];
-
-const AreaKaryawan = ({ searchQuery }) => { 
+const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
   const [karyawanData, setKaryawanData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); 
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const TABLE_HEADS = isLemburMode
+    ? ["No", "No Induk", "Nama", "Email", "Tanggal Pemberian Lembur", "Action"]
+    : [
+        "No",
+        "No Induk",
+        "Nama",
+        "Email",
+        "Jenis Kelamin",
+        "No Telepon",
+        "Action",
+      ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,10 +62,17 @@ const AreaKaryawan = ({ searchQuery }) => {
   return (
     <section className="content-area-table">
       <div className="data-table-info">
-        <h4 className="data-table-title">Data Karyawan</h4>
-        <button onClick={exportToExcel} className="export-btn">
-          Export to Excel
-        </button>
+        <h4 className="data-table-title">{isLemburMode ? "Pemberian Lembur" : "Data Karyawan"}</h4>
+        {!isLemburMode && (
+          <button className="btn-tambahkaryawan">
+            <Link to="/tambahkaryawan">Tambah Karyawan</Link>
+          </button>
+        )}
+        {!isLemburMode && (
+          <button onClick={exportToExcel} className="export-btn">
+            Export to Excel
+          </button>
+        )}
       </div>
       <div className="data-table-diagram">
         {loading ? (
@@ -85,11 +95,25 @@ const AreaKaryawan = ({ searchQuery }) => {
                   <td>{dataKaryawan.nik}</td>
                   <td>{dataKaryawan.nama}</td>
                   <td>{dataKaryawan.email}</td>
-                  <td>{dataKaryawan.kelamin}</td>
-                  <td>{dataKaryawan.hp}</td>
-                  <td className="dt-cell-action">
-                    <AreaKaryawanAction id={dataKaryawan.id} />
-                  </td>
+                  {!isLemburMode && (
+                    <>
+                      <td>{dataKaryawan.kelamin}</td>
+                      <td>{dataKaryawan.hp}</td>
+                      <td className="dt-cell-action">
+                        <AreaKaryawanAction id={dataKaryawan.id} />
+                      </td>
+                    </>
+                  )}
+                  {isLemburMode && (
+                    <>
+                      <td>
+                        <input type="date" />
+                      </td>
+                      <td>
+                        <button className="btn-lembur">Berikan Lembur</button>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>

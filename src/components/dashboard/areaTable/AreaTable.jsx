@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AreaTable.scss";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 const TABLE_HEADS = [
   "No",
@@ -58,10 +59,25 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
     XLSX.writeFile(workbook, "data_kehadiran.xlsx");
   };
 
+  const handleLocation = async() => {
+    const { value: location } = await Swal.fire({
+      title: "Atur Jarak Absensi",
+      input: "text",
+      inputPlaceholder: "Masukkan jarak absensi (meter)",
+      confirmButtonText: "Oke",
+    });
+    if (location) {
+      Swal.fire(`Entered email: ${location}`);
+    }
+  };
+
   return (
     <section className="content-area-table">
       <div className="data-table-info">
         <h4 className="data-table-title">Kehadiran Karyawan</h4>
+        <button onClick={handleLocation} className="btn-tambahkaryawan">
+          Atur Jarak Absensi
+        </button>
         <button onClick={exportToExcel} className="export-btn">
           Export to Excel
         </button>

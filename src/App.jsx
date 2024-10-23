@@ -21,6 +21,7 @@ import {
   PageNotFound,
   Izin,
   PengajuanIzin,
+  PemberianLembur,
   Karyawan,
   KaryawanEdit,
   AdminLogin,
@@ -65,6 +66,13 @@ function App() {
                 </ProtectedAdminIzin>
               }
             />
+            
+            <Route
+              path="/admin/pemberianlembur"
+              element={
+                  <PemberianLembur />
+              }
+            />
 
             <Route
               path="/admin/karyawan"
@@ -87,8 +95,14 @@ function App() {
                 </ProtectedAdminEdit>
               }
             />
+          <Route
+              path="/tambahkaryawan"
+              element={
+                  <UserRegistrasi />
+              }
+            />
           <Route path="*" element={<PageNotFound />} />
-          <Route path="/registrasi" element={<UserRegistrasi />} />
+          {/* <Route path="/tambahkaryawan" element={<UserRegistrasi />} /> */}
           <Route path="/login" element={<UserLogin />} />
           <Route path="/" element={<UserLogin />} />
           <Route

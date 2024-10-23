@@ -10,6 +10,7 @@ import {
   MdOutlineLogout,
   MdOutlinePeople,
   MdAssignmentAdd,
+  MdAccessTime,
 } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Sidebar.scss";
@@ -109,6 +110,18 @@ const Sidebar = () => {
                   <MdAssignmentAdd size={18} />
                 </span>
                 <span className="menu-link-text">Pengajuan Izin</span>
+              </Link>
+            </li>
+            <li className="menu-item">
+              <Link
+                to="/admin/pemberianlembur"
+                className={`menu-link ${activeItem === "/admin/pemberianlembur" ? "active" : ""}`}
+                onClick={() => setActiveItem("/admin/pemberianlembur")}
+              >
+                <span className="menu-link-icon">
+                  <MdAccessTime size={18} />
+                </span>
+                <span className="menu-link-text">Pemberian Lembur</span>
               </Link>
             </li>
             <li className="menu-item">

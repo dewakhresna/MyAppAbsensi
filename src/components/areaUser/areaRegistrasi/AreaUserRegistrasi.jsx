@@ -116,14 +116,14 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
         Swal.fire({
           title: isEditMode
             ? "Berhasil Mengubah Data"
-            : "Registrasi karyawan berhasil.",
+            : "Tambah karyawan berhasil.",
           text: isEditMode
             ? "Data Anda telah diubah."
             : "Data Anda telah terdaftar.",
           icon: "success",
           confirmButtonText: "Ok",
         }).then(() => {
-          window.location.href = isEditMode ? "/admin/karyawan" : "/login";
+          window.location.href = isEditMode ? "/admin/karyawan" : "/admin/karyawan";
         });
       } else {
         Swal.fire({
@@ -148,7 +148,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
   return (
     <div className="user-registrasi-container">
       <div className="registrasi-box">
-        <h2>{isEditMode ? "Edit Karyawan" : "Registrasi Karyawan"}</h2>
+        <h2>{isEditMode ? "Edit Karyawan" : "Tambah Karyawan"}</h2>
         <form onSubmit={handleRegistrasi}>
           <div className="input-group">
             <label htmlFor="nomorInduk">Nomor Induk Karyawan</label>
@@ -238,7 +238,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
           {!isEditMode && (
             <>
               <div className="input-group">
-                <label htmlFor="gambarRegis">Foto Registrasi</label>
+                <label htmlFor="gambarRegis">Foto Karyawan</label>
                 <input
                   type="file"
                   id="gambarRegis"
@@ -270,14 +270,9 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
           )}
           {error && <div className="error-message">{error}</div>}
           <button type="submit" className="registrasi-button">
-            {isEditMode ? "Update" : "Registrasi"}
+            {isEditMode ? "Update" : "Tambah Karyawan"}
           </button>
         </form>
-        {!isEditMode && (
-          <p className="text-bottom">
-            Sudah punya akun? <a href="/login"> Login sekarang</a>
-          </p>
-        )}
       </div>
     </div>
   );

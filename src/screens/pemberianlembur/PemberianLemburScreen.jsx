@@ -10,8 +10,11 @@ const Karyawan = () => {
 
   return (
     <div className="content-area">
-      <AreaTop isDateMode={false} onSearchChange={handleSearchChange} />
-      <AreaKaryawan searchQuery={searchQuery} isLemburMode={false}  />
+      <AreaTop 
+        isDateMode={false} 
+        onSearchChange={handleSearchChange}
+      />
+      <AreaKaryawan searchQuery={searchQuery} isLemburMode={true} />
     </div>
   );
 };

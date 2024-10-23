@@ -67,7 +67,6 @@ const AreaTop = ({ onDateRangeChange, onSearchChange, isDateMode = true }) => {
         <h2 className="area-top-title">Dashboard</h2>
       </div>
 
-      {/* Wrapper untuk filter tanggal dan search bar */}
       <div className="area-top-r">
         {isDateMode && (
           <div
@@ -86,8 +85,6 @@ const AreaTop = ({ onDateRangeChange, onSearchChange, isDateMode = true }) => {
             />
           </div>
         )}
-
-        {/* Search bar mengikuti lebar date-range-wrapper */}
         <input
           type="text"
           placeholder="Search by name..."

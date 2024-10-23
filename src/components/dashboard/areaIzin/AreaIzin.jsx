@@ -57,12 +57,11 @@ const AreaIzin = ({ startDate, endDate, searchQuery, isPengajuanMode = false }) 
   // Handle rejection and trigger re-fetch after deletion
   const handleReject = async (id) => {
     const result = await Swal.fire({
-      title: "Apakah kamu yakin?",
-      text: "Data ini akan dihapus secara permanen!",
+      title: "Apakah yakin menolak izin?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Ya, hapus!",
-      cancelButtonText: "Batal",
+      confirmButtonText: "Ya, Tolak!",
+      cancelButtonText: "Tidak, Batalkan",
     });
 
     if (result.isConfirmed) {
@@ -94,12 +93,11 @@ const AreaIzin = ({ startDate, endDate, searchQuery, isPengajuanMode = false }) 
     console.log("Data yang akan dikirim:", nik, nama, tanggal, alasan);
 
     const result = await Swal.fire({
-      title: "Apakah kamu yakin?",
-      text: "MengApprove Izin ini",
+      title: "Apakah yakin memberikan izin?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Accept",
-      cancelButtonText: "Batal",
+      confirmButtonText: "Ya, Memberikan Izin!",
+      cancelButtonText: "Tidak, Batalkan",
     });
 
     if (result.isConfirmed){
@@ -142,7 +140,7 @@ const AreaIzin = ({ startDate, endDate, searchQuery, isPengajuanMode = false }) 
   return (
     <section className="content-area-table">
       <div className="data-table-info">
-        <h4 className="data-table-title">Izin / Sakit Karyawan</h4>
+        <h4 className="data-table-title">{isPengajuanMode ? "Pengajuan Izin Karyawan" : "Izin / Sakit Karyawan"}</h4>
         {!isPengajuanMode && (
           <button onClick={exportToExcel} className="export-btn">
             Export to Excel

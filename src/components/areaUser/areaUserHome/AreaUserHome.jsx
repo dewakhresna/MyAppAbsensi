@@ -8,7 +8,9 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdForwardToInbox,
   MdOutlineLogout,
-  MdAccessTime
+  MdAccessTime,
+  MdFastForward,
+  MdFastRewind,
 } from "react-icons/md";
 import "./AreaUserHome.scss";
 import React, { useState, useEffect } from 'react';
@@ -162,6 +164,22 @@ const AreaUserHome = () => {
                   <MdForwardToInbox size={20} />
                 </span>
                 <span className="menu-link-text">Pengajuan Izin</span>
+              </Link>
+            </li>
+            <li className="menu-item">
+              <Link to="/home/absen" className="menu-link">
+                <span className="menu-link-icon">
+                  <MdFastForward size={18} />
+                </span>
+                <span className="menu-link-text">Presensi Masuk Lembur</span>
+              </Link>
+            </li>
+            <li className="menu-item">
+              <Link to="/home/keluar" className="menu-link">
+                <span className="menu-link-icon">
+                  <MdFastRewind size={18} />
+                </span>
+                <span className="menu-link-text">Presensi Keluar Lembur</span>
               </Link>
             </li>
           </ul>
