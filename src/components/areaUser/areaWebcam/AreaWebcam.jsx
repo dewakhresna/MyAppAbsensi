@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import Swal from "sweetalert2";
-import "./areaWebcam.scss";
+import "./AreaWebcam.scss";
 import AreaLoading from "../../areaLoading/AreaLoading";
 
 const OFFICE_LATITUDE = -6.18223503101325;
@@ -105,9 +105,7 @@ const AreaWebcam = ({ masuk = false }) => {
             OFFICE_LATITUDE,
             OFFICE_LONGITUDE
           );
-          setDistance(calculatedDistance); // Simpan jarak yang dihitung
-          // console.log(`${latitude}, ${longitude}`);
-          // console.log(`Distance: ${calculatedDistance}`);
+          setDistance(calculatedDistance); 
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -118,6 +116,21 @@ const AreaWebcam = ({ masuk = false }) => {
       alert("Geolocation is not supported by this browser.");
     }
   }, []);
+
+  useEffect(() => {
+    if (!isFaceDetected) {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "info",
+        title: "Pastikan wajah Anda terlihat jelas",
+        text: "Silakan lebih dekat dengan kamera dan pastikan pencahayaan yang cukup.",
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.close(); // Tutup guidance ketika wajah terdeteksi
+    }
+  }, [isFaceDetected]);
 
   const handleVideoPlay = () => {
     const video = webcamRef.current.video;
