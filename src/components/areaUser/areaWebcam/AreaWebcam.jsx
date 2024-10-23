@@ -118,8 +118,10 @@ const AreaWebcam = ({ masuk = false }) => {
   }, []);
 
   useEffect(() => {
+    let alertInstance = null;
+
     if (!isFaceDetected) {
-      Swal.fire({
+      alertInstance = Swal.fire({
         toast: true,
         position: "top-end",
         icon: "info",
@@ -129,6 +131,11 @@ const AreaWebcam = ({ masuk = false }) => {
       });
     } else {
       Swal.close(); // Tutup guidance ketika wajah terdeteksi
+    }
+
+    // Fungsi clean-up back page
+    return () => {
+      Swal.close();
     }
   }, [isFaceDetected]);
 
@@ -234,9 +241,7 @@ const AreaWebcam = ({ masuk = false }) => {
           no_induk: localStorage.getItem("nik"),
         }),
       });
-
       const data = await response.json();
-      console.log("Respons API:", data);
 
       // Menampilkan SweetAlert2 berdasarkan response API
       if (data.statusCode === 200) {
