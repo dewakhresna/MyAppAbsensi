@@ -180,7 +180,6 @@ const AreaUserEdit = ({ isEditMode = false }) => {
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               required
-              disabled
             />
           </div>
           <div className="input-group">
@@ -190,7 +189,6 @@ const AreaUserEdit = ({ isEditMode = false }) => {
               value={jenisKelamin}
               onChange={(e) => setJenisKelamin(e.target.value)}
               required
-              disabled
             >
               <option value="">Pilih</option>
               <option value="Laki-laki">Laki-laki</option>
@@ -209,7 +207,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
           </div>
           {isEditMode && (
             <>
-              <div className="input-group">
+              {/* <div className="input-group">
                 <label htmlFor="gambarRegis">Foto</label>
                 <input
                   type="file"
@@ -217,7 +215,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   onChange={handleFileChange}
                   disabled
                 />
-              </div>
+              </div> */}
 
               <div className="input-group">
                 <label

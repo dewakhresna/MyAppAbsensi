@@ -13,7 +13,7 @@ import {
   MdFastRewind,
 } from "react-icons/md";
 import "./AreaUserHome.scss";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const AreaUserHome = () => {
   const [absensiData, setAbsensiData] = useState([]);
@@ -34,16 +34,16 @@ const AreaUserHome = () => {
       const date = localStorage.getItem("tanggal");
       if (nik) {
         // Filter data berdasarkan NIK yang ada di localStorage
-        const filteredData = data.filter(item => item.nik === nik);
-        console.log("filter date : ", filteredData)
+        const filteredData = data.filter((item) => item.nik === nik);
+        console.log("filter date : ", filteredData);
         if (filteredData.length > 0) {
-          const lembur = filteredData.filter(item => item.tanggal === date);
+          const lembur = filteredData.filter((item) => item.tanggal === date);
           if (lembur.length > 0) {
             setEnableLembur(lembur);
-          }else {
+          } else {
             setEnableLembur(false); // Tidak ada data untuk NIK ini
           }
-        } 
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -58,49 +58,53 @@ const AreaUserHome = () => {
     // Mengambil data dari API
     const fetchData = async () => {
       try {
-        const absensiResponse = await fetch('http://localhost:3001/api/readAbsensi');
+        const absensiResponse = await fetch(
+          "http://localhost:3001/api/readAbsensi"
+        );
         const absensiResults = await absensiResponse.json();
         setAbsensiData(absensiResults);
 
         // const localStorageDate = localStorage.getItem('tanggal');
-        const localStorageNik = localStorage.getItem('nik');
+        const localStorageNik = localStorage.getItem("nik");
         if (localStorageNik) {
           // Filter data berdasarkan NIK yang ada di localStorage
-          const filteredData = absensiResults.filter(data => data.nik === localStorageNik &&
-            data.shift === "Normal");
+          const filteredData = absensiResults.filter(
+            (data) => data.nik === localStorageNik && data.shift === "Normal"
+          );
           setCount(filteredData.length);
         }
 
         if (localStorageNik) {
           // Filter data berdasarkan NIK yang ada di localStorage
-          const filteredDataLembur = absensiResults.filter(data => data.nik === localStorageNik &&
-            data.shift === "Lembur");
+          const filteredDataLembur = absensiResults.filter(
+            (data) => data.nik === localStorageNik && data.shift === "Lembur"
+          );
           setLembur(filteredDataLembur.length);
         }
 
-        const sakitResponse = await fetch('http://localhost:3001/api/readsakit');
+        const sakitResponse = await fetch(
+          "http://localhost:3001/api/readsakit"
+        );
         const sakitResults = await sakitResponse.json();
         setSakitData(sakitResults);
         if (localStorageNik) {
           // Filter data sakit berdasarkan NIK dan keterangan "Sakit"
-          const filteredSakitData = sakitResults.filter(data =>
-            data.nik === localStorageNik &&
-            data.keterangan === "Sakit"
+          const filteredSakitData = sakitResults.filter(
+            (data) =>
+              data.nik === localStorageNik && data.keterangan === "Sakit"
           );
-          
+
           // Filter data izin berdasarkan NIK dan keterangan "Izin"
-          const filteredIzinData = sakitResults.filter(data =>
-            data.nik === localStorageNik &&
-            data.keterangan === "Izin"
+          const filteredIzinData = sakitResults.filter(
+            (data) => data.nik === localStorageNik && data.keterangan === "Izin"
           );
-    
+
           // Set jumlah data yang sesuai dengan "Sakit" dan "Izin"
           setCountSakit(filteredSakitData.length);
           setCountIzin(filteredIzinData.length);
         }
-
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -109,7 +113,7 @@ const AreaUserHome = () => {
 
   console.log(absensiData);
   console.log(sakitData);
-  console.log('Count:', jumlahhadir);
+  console.log("Count:", jumlahhadir);
   const handleLogout = () => {
     localStorage.removeItem("sukses");
     localStorage.removeItem("nama");
@@ -119,7 +123,7 @@ const AreaUserHome = () => {
   };
 
   const id = localStorage.getItem("id");
-  
+
   return (
     <div className="area-user-home">
       <div className="user-home-container">
@@ -185,7 +189,28 @@ const AreaUserHome = () => {
                 <span className="menu-link-text">Pengajuan Izin</span>
               </Link>
             </li>
-            <li className="menu-item">
+            {enableLembur && (
+              <>
+                <li className="menu-item">
+                  <Link to="/home/absenlembur" className="menu-link">
+                    <span className="menu-link-icon">
+                      <MdFastForward size={18} />
+                    </span>
+                    <span>Presensi Masuk Lembur</span>
+                  </Link>
+                </li>
+                <li className="menu-item">
+                  <Link to="/home/keluarlembur" className="menu-link">
+                    <span className="menu-link-icon">
+                      <MdFastRewind size={18} />
+                    </span>
+                    <span>Presensi Keluar Lembur</span>
+                  </Link>
+                </li>
+              </>
+            )}
+
+            {/* <li className="menu-item">
               <Link to="/home/absenlembur"  className={`menu-link ${!enableLembur ? 'disabled' : ''}`}>
                 <span className="menu-link-icon">
                   <MdFastForward size={18} />
@@ -200,7 +225,7 @@ const AreaUserHome = () => {
                 </span>
                 <span className="menu-link-text">Presensi Keluar Lembur</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 
