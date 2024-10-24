@@ -29,7 +29,6 @@ const handleCheck = async (masuk = false) => {
     });
 
     const data = await response.json();
-    console.log(data);
     if (data.success) {
       Swal.fire({
         title: masuk ? "Check-in berhasil!" : "Check-out berhasil!",
@@ -158,6 +157,11 @@ console.log(MAX_DISTANCE_METERS)
       });
     } else {
       Swal.close(); // Tutup guidance ketika wajah terdeteksi
+    }
+    
+    // Fungsi clean-up back page
+    return () => {
+      Swal.close();
     }
   }, [isFaceDetected]);
 
