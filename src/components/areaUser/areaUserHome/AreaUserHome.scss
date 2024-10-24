@@ -9,6 +9,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
+  .disabled {
+    text-decoration-color: gray; /* Atau warna lain yang Anda inginkan */
+    cursor: not-allowed; /* Menampilkan kursor not-allowed */
+    pointer-events: none; /* Menonaktifkan interaksi dengan elemen ini */
+  }
   .user-home-header {
     display: flex;
     justify-content: space-between;

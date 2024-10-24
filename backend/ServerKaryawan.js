@@ -234,27 +234,88 @@ app.delete("/api/delete/:id", (req, res) => {
 });
 
 //tambah hadir
-app.post("/api/karyawan_hadir", (req, res) => {
+app.post('/api/karyawan_hadir', (req, res) => {
   const { nama, nik } = req.body;
+  const tanggal = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
 
-  const query = `
-    INSERT INTO absensi (nama, nik, check_in, tanggal, keterangan)
-    VALUES (?, ?, CURTIME(), CURDATE(),
-    CASE
-        WHEN CURTIME() <= '08:00:00' THEN 'Tepat Waktu'
-        ELSE 'Terlambat'
-    END
-);`;
-  db.query(query, [nama, nik], (error) => {
-    if (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .json({ success: false, message: "Gagal melakukan check-in" });
+  // Query untuk memeriksa apakah user sudah absen hari ini
+  const checkQuery = 'SELECT COUNT(*) as count FROM absensi WHERE nik = ? AND tanggal = ?';
+
+  db.query(checkQuery, [nik, tanggal], (err, result) => {
+    if (err) {
+      console.error('Error checking data:', err);
+      return res.status(500).json({ success: false, message: 'Gagal memeriksa absensi' });
     }
-    res.json({ success: true, message: "Check-in berhasil" });
+
+    const exists = result[0].count > 0;
+    if (exists) {
+      // Jika sudah absen, kirim pesan ini
+      return res.json({ success: false, message: 'Anda telah melakukan absen hari ini' });
+    }
+
+    // Jika belum absen, insert ke database
+    const insertQuery = `
+      INSERT INTO absensi (nama, nik, shift, check_in, tanggal, keterangan)
+      VALUES (?, ?, "Normal", CURTIME(), CURDATE(),
+        CASE
+          WHEN CURTIME() <= '08:00:00' THEN 'Tepat Waktu'
+          ELSE 'Terlambat'
+        END
+      );
+    `;
+
+    db.query(insertQuery, [nama, nik], (error) => {
+      if (error) {
+        console.error('Error inserting data:', error);
+        return res.status(500).json({ success: false, message: 'Gagal melakukan check-in' });
+      }
+      res.json({ success: true, message: 'Check-in berhasil' });
+    });
   });
 });
+
+
+// Chek in Lembur
+app.post('/api/karyawan_lembur', (req, res) => {
+  const { nama, nik } = req.body;
+  const tanggal = new Date().toISOString().slice(0, 10); // Format: YYYY-MM-DD
+
+  // Query untuk memeriksa apakah user sudah absen hari ini
+  const checkQuery = 'SELECT COUNT(*) as count FROM absensi WHERE nik = ? AND tanggal = ?';
+
+  db.query(checkQuery, [nik, tanggal], (err, result) => {
+    if (err) {
+      console.error('Error checking data:', err);
+      return res.status(500).json({ success: false, message: 'Gagal memeriksa absensi' });
+    }
+
+    const exists = result[0].count > 0;
+    if (exists) {
+      // Jika sudah absen, kirim pesan ini
+      return res.json({ success: false, message: 'Anda telah melakukan absen hari ini' });
+    }
+
+    // Jika belum absen, insert ke database
+    const insertQuery = `
+      INSERT INTO absensi (nama, nik, shift, check_in, tanggal, keterangan)
+      VALUES (?, ?, "Lembur", CURTIME(), CURDATE(),
+        CASE
+          WHEN CURTIME() <= '08:00:00' THEN 'Tepat Waktu'
+          ELSE 'Terlambat'
+        END
+      );
+    `;
+
+    db.query(insertQuery, [nama, nik], (error) => {
+      if (error) {
+        console.error('Error inserting data:', error);
+        return res.status(500).json({ success: false, message: 'Gagal melakukan check-in' });
+      }
+      res.json({ success: true, message: 'Check-in berhasil' });
+    });
+  });
+});
+
 
 app.put("/api/karyawan_keluar/:nik", (req, res) => {
   const { nik } = req.body;
@@ -327,10 +388,147 @@ app.get("/api/readsakit", (req, res) => {
   });
 });
 
+// Ambil jarak
+app.get("/api/readDistance", (req, res) => {
+  const sql = "SELECT * FROM distance_admin WHERE id = 1";
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Error fetching data:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Data tidak ditemukan." });
+    }
+    res.json(results[0]); // Mengembalikan objek jarak pertama
+  });
+});
 
 
+app.put("/api/updateDistance", (req, res) => {
+  const { distance } = req.body;
+
+  const sql = `
+    UPDATE distance_admin SET distance = ? WHERE id = 1
+  `;
+
+  db.query(sql, [distance], (err, result) => {
+    if (err) {
+      console.error("Error updating data:", err);
+      return res.status(500).send({ message: "Gagal memperbarui data" });
+    }
+    res.json({ success: true, message: "Data berhasil diperbarui" });
+  });
+});
+
+
+//lembur
+// Tambahkan route baru untuk insert atau update
+app.put('/api/settanggal/:nik', (req, res) => {
+  const { tanggal } = req.body;
+  const nik = req.params.nik;
+
+  // Pertama, kita cek apakah NIK sudah ada di tabel
+  const checkSql = 'SELECT * FROM lembur WHERE nik = ?';
+  
+  db.query(checkSql, [nik], (err, results) => {
+    if (err) {
+      console.error('Error checking data:', err);
+      return res.status(500).send(err);
+    }
+
+    if (results.length > 0) {
+      // Jika sudah ada, kita update
+      const updateSql = 'UPDATE lembur SET tanggal = ? WHERE nik = ?';
+      db.query(updateSql, [tanggal, nik], (err, result) => {
+        if (err) {
+          console.error('Error updating data:', err);
+          return res.status(500).send(err);
+        }
+        res.send({ message: 'Tanggal berhasil diupdate!' });
+      });
+    } else {
+      // Jika belum ada, kita insert
+      const insertSql = 'INSERT INTO lembur (nik, tanggal) VALUES (?, ?)';
+      db.query(insertSql, [nik, tanggal], (err, result) => {
+        if (err) {
+          console.error('Error inserting data:', err);
+          return res.status(500).send(err);
+        }
+        res.send({ message: 'Tanggal berhasil disimpan!' });
+      });
+    }
+  });
+});
+
+//read lembur
+app.get('/api/settanggal', (req, res) => {
+  const sql = 'SELECT nik, tanggal FROM lembur'; // Ambil nik dan tanggal dari tabel lembur
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return res.status(500).json({ error: 'Database query error' });
+    }
+    res.json(results); // Kirim hasil ke klien
+  });
+});
+
+
+const updateAutoCheckout = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0, jadi +1
+  const day = String(now.getDate()).padStart(2, '0');
+  const tanggalServerNyala = `${year}-${month}-${day}`; // Format: YYYY-MM-DD
+
+  const query = `
+    UPDATE absensi
+    SET check_out = '17:00:00'
+    WHERE check_out IS NULL AND tanggal < ?;
+  `;
+
+  db.query(query, [tanggalServerNyala], (err, result) => {
+    if (err) {
+      console.error('Error updating auto-checkout:', err);
+    } else {
+      console.log(`Auto-checkout updated for ${result.affectedRows} rows.`);
+    }
+  });
+};
+
+const updateAutoCheckoutToday = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0, jadi +1
+  const day = String(now.getDate()).padStart(2, '0');
+  const tanggalServerNyala = `${year}-${month}-${day}`; // Format: YYYY-MM-DD
+
+  const currentTime = now.toTimeString().slice(0, 8); // Format: HH:MM:SS (ambil bagian waktu saja)
+
+  const query = `
+    UPDATE absensi
+    SET check_out = '17:00:00'
+    WHERE check_out IS NULL 
+      AND tanggal = ? 
+      AND ? > '17:00:00';
+  `;
+
+  db.query(query, [tanggalServerNyala, currentTime], (err, result) => {
+    if (err) {
+      console.error('Error updating auto-checkout:', err);
+    } else {
+      console.log(`Auto-checkout updated for ${result.affectedRows} rows.`);
+    }
+  });
+};
+
+
+updateAutoCheckout();
+updateAutoCheckoutToday();
 
 // Menjalankan server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  updateAutoCheckout();
+  updateAutoCheckoutToday();
 });

@@ -14,7 +14,7 @@ const handleCheck = async (masuk = false) => {
   const id = localStorage.getItem("id"); // Asumsi ID disimpan di localStorage
 
   const url = masuk
-    ? "http://localhost:3001/api/karyawan_hadir"
+    ? "http://localhost:3001/api/karyawan_lembur"
     : `http://localhost:3001/api/karyawan_keluar/${nik}`;
 
   const method = masuk ? "POST" : "PUT";
@@ -38,7 +38,15 @@ const handleCheck = async (masuk = false) => {
       }).then(function () {
         window.location.href = "http://localhost:5173/home";
       });
-    } else {
+    }else if (data.message === "Anda telah melakukan absen hari ini") {
+      // Jika sudah pernah absen hari ini
+      Swal.fire({
+        title: "Absen Gagal!",
+        text: "Anda telah melakukan absen hari ini.",
+        icon: "warning",
+        confirmButtonText: "Oke",
+      });
+    }else {
       Swal.fire({
         title: masuk ? "Gagal check-in." : "Gagal check-out.",
         icon: "error",
@@ -72,7 +80,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return distance;
 };
 
-const AreaWebcam = ({ masuk = false }) => {
+const AreaWebcamLembur = ({ masuk = false }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -139,10 +147,8 @@ console.log(MAX_DISTANCE_METERS)
   }, []);
 
   useEffect(() => {
-    let alertInstance = null;
-
     if (!isFaceDetected) {
-      alertInstance = Swal.fire({
+      Swal.fire({
         toast: true,
         position: "top-end",
         icon: "info",
@@ -152,11 +158,6 @@ console.log(MAX_DISTANCE_METERS)
       });
     } else {
       Swal.close(); // Tutup guidance ketika wajah terdeteksi
-    }
-
-    // Fungsi clean-up back page
-    return () => {
-      Swal.close();
     }
   }, [isFaceDetected]);
 
@@ -262,7 +263,9 @@ console.log(MAX_DISTANCE_METERS)
           no_induk: localStorage.getItem("nik"),
         }),
       });
+
       const data = await response.json();
+      console.log("Respons API:", data);
 
       // Menampilkan SweetAlert2 berdasarkan response API
       if (data.statusCode === 200) {
@@ -349,4 +352,4 @@ console.log(MAX_DISTANCE_METERS)
   );
 };
 
-export default AreaWebcam;
+export default AreaWebcamLembur;
