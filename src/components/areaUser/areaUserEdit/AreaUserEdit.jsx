@@ -148,7 +148,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
   return (
     <div className="user-registrasi-container">
       <div className="registrasi-box">
-        <h2>{isEditMode ? "Edit User" : "Registrasi User"}</h2>
+        <h2>{isEditMode ? "Edit Karyawan" : "Registrasi Karyawan"}</h2>
         <form onSubmit={handleRegistrasi}>
           <div className="input-group">
             <label htmlFor="nomorInduk">Nomor Induk Karyawan</label>
@@ -158,6 +158,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
               value={nomorInduk}
               onChange={(e) => setNomorInduk(e.target.value)}
               required
+              disabled
             />
           </div>
           <div className="input-group">
@@ -168,16 +169,18 @@ const AreaUserEdit = ({ isEditMode = false }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled
             />
           </div>
           <div className="input-group">
-            <label htmlFor="nama">Nama</label>
+            <label htmlFor="nama">Nama Lengkap</label>
             <input
               type="text"
               id="nama"
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               required
+              disabled
             />
           </div>
           <div className="input-group">
@@ -187,6 +190,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
               value={jenisKelamin}
               onChange={(e) => setJenisKelamin(e.target.value)}
               required
+              disabled
             >
               <option value="">Pilih</option>
               <option value="Laki-laki">Laki-laki</option>
@@ -211,6 +215,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   type="file"
                   id="gambarRegis"
                   onChange={handleFileChange}
+                  disabled
                 />
               </div>
 
@@ -219,7 +224,7 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   htmlFor="gambarRegisLama"
                   onClick={() => handleImageChange(currentGambar)}
                 >
-                  Lihat Foto Sekarang
+                  Lihat Foto
                 </label>
               </div>
 
