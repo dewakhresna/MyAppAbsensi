@@ -24,10 +24,10 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
   // Meminta pengguna untuk memasukkan jarak absensi
   const handleLocation = async () => {
     const { value: jarak } = await Swal.fire({
-      title: "Atur Jarak Absensi",
+      title: "Atur Radius Absensi",
       input: "text",
       inputValue: distance,
-      inputPlaceholder: "Masukkan jarak absensi (meter)",
+      inputPlaceholder: "Masukkan radius absensi (meter)",
       confirmButtonText: "Oke",
     });
 
@@ -37,7 +37,7 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
       if (!isNaN(parsedDistance) && parsedDistance > 0) {
         await handleUpdate(parsedDistance); // Memanggil handleUpdate dengan jarak yang dimasukkan
       } else {
-        Swal.fire("Error", "Masukkan jarak yang valid (angka positif)", "error");
+        Swal.fire("Error", "Masukkan radius yang valid (angka positif)", "error");
       }
     }
   };
@@ -57,7 +57,8 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
       if (response.ok) {
         setDistance(newDistance); // Memperbarui state distance dengan nilai baru
         setMessage("Data berhasil diperbarui.");
-        Swal.fire("Sukses", "Jarak absensi berhasil diperbarui.", "success");
+        Swal.fire("Sukses", "Radius absensi berhasil diperbarui.", "success");
+
       } else {
         setMessage(data.message || "Gagal memperbarui data.");
       }
@@ -78,7 +79,7 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
         setDistance(data.distance); // Menyimpan jarak dari server ke state
       } catch (err) {
         console.error(err);
-        setMessage("Gagal memuat data jarak.");
+        setMessage("Gagal memuat data radius.");
       }
     };
     fetchData();
@@ -133,7 +134,7 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
       <div className="data-table-info">
         <h4 className="data-table-title">Kehadiran Karyawan</h4>
         <button onClick={handleLocation} className="btn-tambahkaryawan">
-          Atur Jarak Absensi
+          Atur Radius Absensi
         </button>
         <button onClick={exportToExcel} className="export-btn">
           Export to Excel

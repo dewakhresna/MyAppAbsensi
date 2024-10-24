@@ -121,7 +121,7 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
             ? "Data Anda telah diubah."
             : "Data Anda telah terdaftar.",
           icon: "success",
-          confirmButtonText: "Ok",
+          confirmButtonText: "Oke",
         }).then(() => {
           window.location.href = isEditMode ? "/admin/karyawan" : "/admin/karyawan";
         });

@@ -32,9 +32,18 @@ const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
   
       if (response.ok) {
         const data = await response.json();
-        Swal.fire("Sukses",data.message, "success");
+        // Swal.fire("Sukses",data.message, "success");
+        Swal.fire({
+          title: "Pemberian Lembur Berhasil",
+          icon: "success",
+          confirmButtonText: "Oke",
+        });
       } else {
-        alert("Gagal mengupdate atau menyimpan tanggal.");
+        Swal.fire({
+          title: "Gagal Memberikan Lembur",
+          icon: "error",
+          confirmButtonText: "Kembali",
+        });
       }
     } catch (error) {
       console.error("Error updating data:", error);

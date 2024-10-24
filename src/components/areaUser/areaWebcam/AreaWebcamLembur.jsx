@@ -329,7 +329,7 @@ console.log(MAX_DISTANCE_METERS)
 
   return (
     <div className="area-webcam-container">
-      <h2>{masuk ? "Absensi Kehadiran" : "Absensi Keluar"}</h2>
+      <h2>{masuk ? "Absensi Kehadiran Lembur" : "Absensi Keluar Lembur"}</h2>
       <Webcam
         audio={false}
         screenshotFormat="image/jpeg"
