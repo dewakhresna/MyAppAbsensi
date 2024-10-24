@@ -37,10 +37,6 @@ const Sidebar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   localStorage.removeItem("admin");
-  // }, []);
-
   const handleLogout = () => {
     localStorage.removeItem("admin");
     console.log("Admin removed from localStorage");

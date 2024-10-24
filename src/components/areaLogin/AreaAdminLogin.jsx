@@ -11,7 +11,7 @@ const AreaAdminLogin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Simulate authentication (replace this with actual authentication logic)
+    // password login admin
     if (email === "admin@example.com" && password === "123") {
       localStorage.setItem("admin", "admin");
       navigate("/admin");

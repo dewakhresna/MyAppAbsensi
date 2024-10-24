@@ -209,23 +209,6 @@ const AreaUserHome = () => {
                 </li>
               </>
             )}
-
-            {/* <li className="menu-item">
-              <Link to="/home/absenlembur"  className={`menu-link ${!enableLembur ? 'disabled' : ''}`}>
-                <span className="menu-link-icon">
-                  <MdFastForward size={18} />
-                </span>
-                <span>Presensi Masuk Lembur</span>
-              </Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/home/keluarlembur" className={`menu-link ${!enableLembur ? 'disabled' : ''}`}>
-                <span className="menu-link-icon">
-                  <MdFastRewind size={18} />
-                </span>
-                <span className="menu-link-text">Presensi Keluar Lembur</span>
-              </Link>
-            </li> */}
           </ul>
         </div>
 
@@ -241,10 +224,6 @@ const AreaUserHome = () => {
             </li>
           </ul>
         </div>
-
-        {/* <Link to="/login" className="menu-link" onClick={handleLogout}>
-        <span className="menu-link-text">Logout</span>
-      </Link> */}
       </div>
     </div>
   );

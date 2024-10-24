@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AreaUserRegistrasi.scss"; // Custom styles for the registration page
+import "./AreaUserRegistrasi.scss"; 
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 

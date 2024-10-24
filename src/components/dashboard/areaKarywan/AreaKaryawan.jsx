@@ -32,7 +32,6 @@ const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
   
       if (response.ok) {
         const data = await response.json();
-        // Swal.fire("Sukses",data.message, "success");
         Swal.fire({
           title: "Pemberian Lembur Berhasil",
           icon: "success",

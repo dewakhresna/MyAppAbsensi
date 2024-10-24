@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./AreaUserLogin.scss"; // Custom styles for the login page
+import "./AreaUserLogin.scss";
 
 const AreaUserLogin = () => {
   const [email, setEmail] = useState("");

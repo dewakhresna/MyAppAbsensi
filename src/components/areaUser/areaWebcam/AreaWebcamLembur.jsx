@@ -296,7 +296,7 @@ console.log(MAX_DISTANCE_METERS)
           title: "Error!",
           text: data.response,
           icon: "error",
-          confirmButtonText: "OK",
+          confirmButtonText: "Oke",
         });
       } else if (data.status === "error") {
         Swal.fire({

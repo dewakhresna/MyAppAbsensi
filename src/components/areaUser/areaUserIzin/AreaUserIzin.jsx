@@ -168,7 +168,6 @@ const handleIzin = async (e) => {
     <div className="user-izin-container">
       <div className="izin-box">
         <h2>Pengajuan Izin</h2>
-        {/* Dropdown untuk memilih antara "Sakit" dan "Izin" */}
         <div className="input-group">
           <label htmlFor="keterangan">Keterangan</label>
           <select
@@ -181,8 +180,6 @@ const handleIzin = async (e) => {
             <option value="Izin">Izin</option>
           </select>
         </div>
-  
-        {/* Form untuk Sakit */}
         {selectedOption === "Sakit" && (
           <form onSubmit={handleFormSubmit}>
             <div className="input-group">
@@ -205,8 +202,7 @@ const handleIzin = async (e) => {
             </button>
           </form>
         )}
-  
-        {/* Form untuk Izin */}
+
         {selectedOption === "Izin" && (
           <form onSubmit={handleIzin}>
             <div className="input-group">
