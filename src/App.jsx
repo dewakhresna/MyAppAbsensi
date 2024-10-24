@@ -16,6 +16,8 @@ import ProtectEdit from "./components/areaUser/areaUserLogin/ProtectEdit";
 import ProtectCheckOut from "./components/areaUser/areaUserLogin/ProtectCheckOut";
 
 import UserCheckOut from "./screens/user/UserCheckOut";
+import UserCheckOutLembur from "./screens/user/UserCheckOutLembur";
+import UserAbsenLembur from "./screens/user/UserAbsenLembur";
 import {
   Dashboard,
   PageNotFound,
@@ -143,6 +145,18 @@ function App() {
               <ProtectCheckOut>
                 <UserCheckOut />
               </ProtectCheckOut>
+            }
+          />
+          <Route
+            path="/home/absenlembur"
+            element={
+                <UserAbsenLembur />
+            }
+          />
+          <Route
+            path="/home/keluarlembur"
+            element={
+                <UserCheckOutLembur/>
             }
           />
           <Route

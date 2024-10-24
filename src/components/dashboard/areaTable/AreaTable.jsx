@@ -7,6 +7,7 @@ const TABLE_HEADS = [
   "No",
   "No Induk",
   "Nama",
+  "Shift",
   "Tanggal Absensi",
   "CheckIn",
   "CheckOut",
@@ -16,6 +17,72 @@ const TABLE_HEADS = [
 const AreaTable = ({ startDate, endDate, searchQuery }) => {
   const [absensidata, setabsensidata] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+
+  const [distance, setDistance] = useState(0); 
+  const [message, setMessage] = useState(""); 
+
+  // Meminta pengguna untuk memasukkan jarak absensi
+  const handleLocation = async () => {
+    const { value: jarak } = await Swal.fire({
+      title: "Atur Jarak Absensi",
+      input: "text",
+      inputValue: distance,
+      inputPlaceholder: "Masukkan jarak absensi (meter)",
+      confirmButtonText: "Oke",
+    });
+
+    if (jarak) {
+      // Memastikan bahwa input valid (angka positif)
+      const parsedDistance = parseFloat(jarak); // Mengonversi input menjadi angka
+      if (!isNaN(parsedDistance) && parsedDistance > 0) {
+        await handleUpdate(parsedDistance); // Memanggil handleUpdate dengan jarak yang dimasukkan
+      } else {
+        Swal.fire("Error", "Masukkan jarak yang valid (angka positif)", "error");
+      }
+    }
+  };
+
+  // Mengupdate jarak di database
+  const handleUpdate = async (newDistance) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/updateDistance", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ distance: newDistance }), 
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setDistance(newDistance); // Memperbarui state distance dengan nilai baru
+        setMessage("Data berhasil diperbarui.");
+        Swal.fire("Sukses", "Jarak absensi berhasil diperbarui.", "success");
+      } else {
+        setMessage(data.message || "Gagal memperbarui data.");
+      }
+    } catch (error) {
+      console.error(`Terjadi kesalahan: ${error.message}`);
+      setMessage(`Error: ${error.message}`);
+    }
+  };
+
+  // Mengambil jarak dari server saat komponen dimuat
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/readDistance");
+        if (!response.ok) throw new Error("Gagal mengambil data dari server");
+
+        const data = await response.json();
+        setDistance(data.distance); // Menyimpan jarak dari server ke state
+      } catch (err) {
+        console.error(err);
+        setMessage("Gagal memuat data jarak.");
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,18 +126,8 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
     XLSX.writeFile(workbook, "data_kehadiran.xlsx");
   };
 
-  const handleLocation = async() => {
-    const { value: location } = await Swal.fire({
-      title: "Atur Jarak Absensi",
-      input: "text",
-      inputPlaceholder: "Masukkan jarak absensi (meter)",
-      confirmButtonText: "Oke",
-    });
-    if (location) {
-      Swal.fire(`Entered email: ${location}`);
-    }
-  };
 
+  
   return (
     <section className="content-area-table">
       <div className="data-table-info">
@@ -97,6 +154,7 @@ const AreaTable = ({ startDate, endDate, searchQuery }) => {
                 <td>{index + 1}</td>
                 <td>{absendata.nik}</td>
                 <td>{absendata.nama}</td>
+                <td>{absendata.shift}</td>
                 <td>{new Date(absendata.tanggal).toLocaleDateString("en-GB")}</td>
                 <td>{absendata.check_in}</td>
                 <td>{absendata.check_out}</td>

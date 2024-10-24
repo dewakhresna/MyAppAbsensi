@@ -19,13 +19,40 @@ const AreaUserHome = () => {
   const [absensiData, setAbsensiData] = useState([]);
   const [sakitData, setSakitData] = useState([]);
   const [jumlahhadir, setCount] = useState(0);
+  const [jumlahlembur, setLembur] = useState(0);
   const [jumlahsakit, setCountSakit] = useState(0);
   const [jumlahizin, setCountIzin] = useState(0);
+  const [enableLembur, setEnableLembur] = useState(false); // State untuk enable/disable tautan lembur
 
-  const extractDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB");
+  const fetchTanggal = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/settanggal");
+      const data = await response.json();
+
+      console.log("Raw API Response:", data); // Log data mentah dari API
+      const nik = localStorage.getItem("nik");
+      const date = localStorage.getItem("tanggal");
+      if (nik) {
+        // Filter data berdasarkan NIK yang ada di localStorage
+        const filteredData = data.filter(item => item.nik === nik);
+        console.log("filter date : ", filteredData)
+        if (filteredData.length > 0) {
+          const lembur = filteredData.filter(item => item.tanggal === date);
+          if (lembur.length > 0) {
+            setEnableLembur(lembur);
+          }else {
+            setEnableLembur(false); // Tidak ada data untuk NIK ini
+          }
+        } 
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchTanggal(); // Ambil tanggal saat komponen pertama kali dimuat
+  }, []);
 
   useEffect(() => {
     // Mengambil data dari API
@@ -37,32 +64,23 @@ const AreaUserHome = () => {
 
         // const localStorageDate = localStorage.getItem('tanggal');
         const localStorageNik = localStorage.getItem('nik');
-        // const formattedLocalStorageDate = extractDate(localStorageDate);
-
-        // const formatted = absensiResults.map(item => ({
-        //   ...item,
-        //   formattedDate: extractDate(item.tanggal)
-        // }));
         if (localStorageNik) {
           // Filter data berdasarkan NIK yang ada di localStorage
-          const filteredData = absensiResults.filter(data => data.nik === localStorageNik);
-    
-          // Set count berdasarkan jumlah data yang cocok dengan NIK
+          const filteredData = absensiResults.filter(data => data.nik === localStorageNik &&
+            data.shift === "Normal");
           setCount(filteredData.length);
+        }
+
+        if (localStorageNik) {
+          // Filter data berdasarkan NIK yang ada di localStorage
+          const filteredDataLembur = absensiResults.filter(data => data.nik === localStorageNik &&
+            data.shift === "Lembur");
+          setLembur(filteredDataLembur.length);
         }
 
         const sakitResponse = await fetch('http://localhost:3001/api/readsakit');
         const sakitResults = await sakitResponse.json();
         setSakitData(sakitResults);
-
-        // const keterangan = sakitResults.map(item => ({
-        //   DataKeteranganFilter: item.keterangan,
-        //   formattedDateizin: extractDate(item.tanggal)
-        // }));
-        
-        // setCountSakit(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Sakit").length);
-        // setCountIzin(keterangan.filter(data => data.formattedDateizin === formattedLocalStorageDate && data.DataKeteranganFilter == "Izin").length);
-
         if (localStorageNik) {
           // Filter data sakit berdasarkan NIK dan keterangan "Sakit"
           const filteredSakitData = sakitResults.filter(data =>
@@ -101,6 +119,7 @@ const AreaUserHome = () => {
   };
 
   const id = localStorage.getItem("id");
+  
   return (
     <div className="area-user-home">
       <div className="user-home-container">
@@ -124,7 +143,7 @@ const AreaUserHome = () => {
             <span className="menu-link-icon">
               <MdAccessTime size={18} />
             </span>
-            <span className="status-card-text">{`${jumlahhadir} Lembur`}</span>
+            <span className="status-card-text">{`${jumlahlembur} Lembur`}</span>
           </div>
           <div className="status-card">
             <span className="menu-link-icon">
@@ -167,15 +186,15 @@ const AreaUserHome = () => {
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/home/absen" className="menu-link">
+              <Link to="/home/absenlembur"  className={`menu-link ${!enableLembur ? 'disabled' : ''}`}>
                 <span className="menu-link-icon">
                   <MdFastForward size={18} />
                 </span>
-                <span className="menu-link-text">Presensi Masuk Lembur</span>
+                <span>Presensi Masuk Lembur</span>
               </Link>
             </li>
             <li className="menu-item">
-              <Link to="/home/keluar" className="menu-link">
+              <Link to="/home/keluarlembur" className={`menu-link ${!enableLembur ? 'disabled' : ''}`}>
                 <span className="menu-link-icon">
                   <MdFastRewind size={18} />
                 </span>

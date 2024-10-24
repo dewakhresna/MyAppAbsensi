@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AreaKaryawanAction from "./AreaKaryawanAction";
 import "./AreaKaryawan.scss";
+import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 
 const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
@@ -9,6 +10,60 @@ const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [tanggal, setTanggal] = useState({}); // Objek untuk menyimpan tanggal berdasarkan nik
+
+  const handleDateChange = (nik, e) => {
+    const newDate = e.target.value;
+    console.log("Input Date Changed for NIK:", nik, "Value:", newDate);
+    setTanggal((prev) => ({ ...prev, [nik]: newDate })); // Update tanggal untuk karyawan tertentu
+  };
+
+  const handleUpdate = async (nik) => {
+    console.log("Updating Date for NIK:", nik, "Tanggal:", tanggal[nik]); // Log tanggal yang akan diupdate
+  
+    try {
+      const response = await fetch(`http://localhost:3001/api/settanggal/${nik}`, { // Menggunakan API baru
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tanggal: tanggal[nik] }), // Kirim tanggal untuk nik tertentu
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        Swal.fire("Sukses",data.message, "success");
+      } else {
+        alert("Gagal mengupdate atau menyimpan tanggal.");
+      }
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+  
+  const fetchTanggal = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/settanggal");
+      const data = await response.json();
+
+      console.log("Raw API Response:", data); // Log data mentah dari API
+      if (data.length > 0) {
+        data.forEach(item => {
+          console.log("Fetched Date for NIK:", item.nik, "Date:", item.tanggal); // Log tanggal yang diambil
+          if (item.tanggal) {
+            const formattedDate = formatToInputDate(item.tanggal); // Fungsi yang perlu Anda definisikan untuk format tanggal
+            setTanggal(prev => ({ ...prev, [item.nik]: formattedDate })); // Simpan tanggal ke state berdasarkan NIK
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTanggal(); // Ambil tanggal saat komponen pertama kali dimuat
+  }, []);
 
   const TABLE_HEADS = isLemburMode
     ? ["No", "No Induk", "Nama", "Email", "Tanggal Pemberian Lembur", "Action"]
@@ -107,10 +162,14 @@ const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
                   {isLemburMode && (
                     <>
                       <td>
-                        <input type="date" />
+                        <input
+                          type="date"
+                          value={tanggal[dataKaryawan.nik] || ""} // Menggunakan tanggal yang disimpan untuk NIK karyawan
+                          onChange={(e) => handleDateChange(dataKaryawan.nik, e)} // Menyediakan NIK karyawan saat menangani perubahan
+                        />
                       </td>
                       <td>
-                        <button className="btn-lembur">Berikan Lembur</button>
+                        <button className="btn-lembur" onClick={() => handleUpdate(dataKaryawan.nik)}>Berikan Lembur</button>
                       </td>
                     </>
                   )}
@@ -125,3 +184,10 @@ const AreaKaryawan = ({ searchQuery, isLemburMode = false }) => {
 };
 
 export default AreaKaryawan;
+
+// Fungsi untuk memformat tanggal ke format input yang sesuai
+const formatToInputDate = (date) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const formattedDate = new Date(date).toLocaleDateString('en-CA', options); // Format ke YYYY-MM-DD
+  return formattedDate;
+};
