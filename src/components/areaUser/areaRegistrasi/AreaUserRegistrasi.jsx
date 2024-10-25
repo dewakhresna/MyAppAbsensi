@@ -88,10 +88,10 @@ const AreaUserRegistrasi = ({ isEditMode = false }) => {
       setError("Nomor Telepon harus berupa angka.");
       return;
     }
-    if (password !== confirmpassword) {
+    if (!isEditMode && password !== confirmpassword) {
       setError("Konfirmasi password tidak sesuai.");
       return;
-    }
+  }  
 
     try {
       const response = await fetch(
