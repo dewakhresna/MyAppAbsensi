@@ -88,10 +88,10 @@ const AreaUserEdit = ({ isEditMode = false }) => {
       setError("Nomor Telepon harus berupa angka.");
       return;
     }
-    if (password !== confirmpassword) {
+    if (!isEditMode && password !== confirmpassword) {
       setError("Konfirmasi password tidak sesuai.");
       return;
-    }
+  }  
 
     try {
       const response = await fetch(
@@ -236,6 +236,16 @@ const AreaUserEdit = ({ isEditMode = false }) => {
                   required
                 />
               </div>
+              {/* <div className="input-group">
+                <label htmlFor="confirmpassword">Konfirmasi Password</label>
+                <input
+                  type="password"
+                  id="confirmpassword"
+                  value={confirmpassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div> */}
             </>
           )}
           {!isEditMode && (

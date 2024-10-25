@@ -150,13 +150,19 @@ function App() {
           <Route
             path="/home/absenlembur"
             element={
+              <ProtectAbsen>
                 <UserAbsenLembur />
+              </ProtectAbsen>
+                
             }
           />
           <Route
             path="/home/keluarlembur"
             element={
+              <ProtectCheckOut>
                 <UserCheckOutLembur/>
+              </ProtectCheckOut>
+                
             }
           />
           <Route
